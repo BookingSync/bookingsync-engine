@@ -1,3 +1,6 @@
+require 'omniauth'
+require 'omniauth-bookingsync'
+
 module BookingSync
   class Engine < ::Rails::Engine
     initializer "bookingsync.add_omniauth" do |app|
