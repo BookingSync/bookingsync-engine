@@ -31,6 +31,10 @@ module BookingSync::Engine::Helpers
     end
   end
 
+  def application_token
+    @application_token ||= oauth_client.client_credentials.get_token
+  end
+
   def oauth_client
     client_options = {
       site: ENV['BOOKINGSYNC_URL'] || 'https://www.bookingsync.com',
