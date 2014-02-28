@@ -41,7 +41,7 @@ module BookingSync::Engine::Helpers
       connection_opts: { headers: { accept: "application/vnd.api+json" } }
     }
     if Rails.env.development? || Rails.env.test?
-      client_options[:ssl] = { verify: ENV['BOOKINGSYNC_URL'] || true }
+      client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] || true }
     end
     OAuth2::Client.new(ENV['BOOKINGSYNC_APP_ID'], ENV['BOOKINGSYNC_APP_SECRET'],
       client_options)
