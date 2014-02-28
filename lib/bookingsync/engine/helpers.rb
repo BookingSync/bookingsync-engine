@@ -3,9 +3,22 @@ module BookingSync::Engine::Helpers
   # helper_method :current_account
   included do
     helper_method :current_account
+    rescue_from OAuth2::Error, with: :handle_oauth_error
   end
 
   private
+
+  def handle_oauth_error(error)
+    if error.code == "Not authorized"
+      if current_account
+        current_account.clear_token!
+        session[:account_id] = nil
+        redirect_to "/auth/bookingsync"
+      end
+    else
+      raise
+    end
+  end
 
   def current_account
     @current_account ||= ::Account.find(session[:account_id]) if session[:account_id]
