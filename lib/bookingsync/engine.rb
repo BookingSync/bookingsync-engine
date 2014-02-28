@@ -12,7 +12,11 @@ module BookingSync
             if url = ENV['BOOKINGSYNC_URL']
               env['omniauth.strategy'].options[:client_options].site = url
             end
-            env['omniauth.strategy'].options[:client_options].ssl = {verify: false} if Rails.env.development?
+            if Rails.env.development? || Rails.env.test?
+              env['omniauth.strategy'].options[:client_options].ssl = {
+                verify: ENV['BOOKINGSYNC_VERIFY_SSL'] == 'true'
+              }
+            end
           }
       end
     end
