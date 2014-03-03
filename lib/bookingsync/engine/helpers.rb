@@ -8,6 +8,14 @@ module BookingSync::Engine::Helpers
 
   private
 
+  def after_bookingsync_sign_in_path
+    root_path
+  end
+
+  def after_bookingsync_sign_out_path
+    root_path
+  end
+
   def handle_oauth_error(error)
     if error.code == "Not authorized"
       if current_account
