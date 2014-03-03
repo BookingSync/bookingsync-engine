@@ -17,6 +17,8 @@ module BookingSync
                 verify: ENV['BOOKINGSYNC_VERIFY_SSL'] == 'true'
               }
             end
+            env['omniauth.strategy'].options[:authorize_params][:account_id] =
+              env['rack.session']['_bookingsync_account_id']
           }
       end
     end

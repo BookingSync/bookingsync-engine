@@ -2,11 +2,16 @@ module BookingSync::Engine::Helpers
   extend ActiveSupport::Concern
   # helper_method :current_account
   included do
+    before_action :store_bookingsync_account_id
     helper_method :current_account
     rescue_from OAuth2::Error, with: :handle_oauth_error
   end
 
   private
+
+  def store_bookingsync_account_id
+    session[:_bookingsync_account_id] = params.delete(:_bookingsync_account_id)
+  end
 
   def after_bookingsync_sign_in_path
     root_path
