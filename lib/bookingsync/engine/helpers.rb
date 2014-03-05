@@ -1,8 +1,7 @@
 module BookingSync::Engine::Helpers
   extend ActiveSupport::Concern
-  # helper_method :current_account
   included do
-    before_action :store_bookingsync_account_id
+    before_action :store_bookingsync_account_id, :enforce_account_id
     helper_method :current_account
     rescue_from OAuth2::Error, with: :handle_oauth_error
   end
@@ -25,7 +24,7 @@ module BookingSync::Engine::Helpers
     if error.code == "Not authorized"
       if current_account
         current_account.clear_token!
-        session[:account_id] = nil
+        clear_account_id_authorization!
         redirect_to "/auth/bookingsync"
       end
     else
@@ -34,7 +33,40 @@ module BookingSync::Engine::Helpers
   end
 
   def current_account
-    @current_account ||= ::Account.find(session[:account_id]) if session[:account_id]
+    @current_account ||= ::Account.find_by(uid: session[:account_id]) if session[:account_id].present?
+  end
+
+  def account_id_authorized!(account_id)
+    session[:account_id] = account_id.to_i
+    session[:authorized_account_ids] ||= []
+    unless account_id_authorized?(account_id)
+      session[:authorized_account_ids] << account_id.to_i
+    end
+  end
+
+  def clear_account_id_authorization!
+    session[:account_id] = nil
+    session[:authorized_account_ids] = []
+  end
+
+  def account_id_authorized?(account_id)
+    session[:authorized_account_ids] ||= []
+    session[:authorized_account_ids].include? account_id.to_i
+  end
+
+  def enforce_account_id
+    bookingsync_account_id = session[:_bookingsync_account_id]
+    if bookingsync_account_id.present?
+      if account_id_authorized?(bookingsync_account_id)
+        session[:account_id] = bookingsync_account_id
+      else
+        session[:account_id] = nil
+      end
+    end
+  end
+
+  def allow_bookingsync_iframe
+    response.headers['X-Frame-Options'] = ''
   end
 
   def current_account_token
