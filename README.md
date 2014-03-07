@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/BookingSync/bookingsync-engine.png)](https://codeclimate.com/github/BookingSync/bookingsync-engine)
+
 # BookingSync Engine
 
 ## Instalation
