@@ -10,4 +10,9 @@ class SessionsController < ApplicationController
     clear_account_id_authorization!
     redirect_to after_bookingsync_sign_out_path, notice: "Signed out"
   end
+
+  def failure
+    response.headers['X-Frame-Options'] = '' if BookingSync::Engine.embedded
+    @error_message = params[:message].humanize
+  end
 end
