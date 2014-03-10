@@ -95,7 +95,7 @@ module BookingSync::Engine::Helpers
         token_options[:expires_at]    = current_account.oauth_expires_at
       end
 
-      token = OAuth2::AccessToken.new(oauth_client,
+      token = OAuth2::AccessToken.new(BookingSync::Engine.oauth_client,
         current_account.oauth_access_token, token_options)
 
       if token.expired?
@@ -108,18 +108,11 @@ module BookingSync::Engine::Helpers
   end
 
   def application_token
-    @application_token ||= oauth_client.client_credentials.get_token
-  end
-
-  def oauth_client
-    client_options = {
-      site: ENV['BOOKINGSYNC_URL'] || 'https://www.bookingsync.com',
-      connection_opts: { headers: { accept: "application/vnd.api+json" } }
-    }
-    if Rails.env.development? || Rails.env.test?
-      client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] == 'true' }
+    token = Thread.current[:_bookingsync_application_token]
+    if token.nil? || token.expired?
+      token = Thread.current[:_bookingsync_application_token] =
+        BookingSync::Engine.application_token
     end
-    OAuth2::Client.new(ENV['BOOKINGSYNC_APP_ID'], ENV['BOOKINGSYNC_APP_SECRET'],
-      client_options)
+    token
   end
 end

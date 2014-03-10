@@ -45,5 +45,21 @@ module BookingSync
     def self.standalone!
       self.embedded = false
     end
+
+    def self.oauth_client
+      client_options = {
+        site: ENV['BOOKINGSYNC_URL'] || 'https://www.bookingsync.com',
+        connection_opts: { headers: { accept: "application/vnd.api+json" } }
+      }
+      if Rails.env.development? || Rails.env.test?
+        client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] == 'true' }
+      end
+      OAuth2::Client.new(ENV['BOOKINGSYNC_APP_ID'], ENV['BOOKINGSYNC_APP_SECRET'],
+        client_options)
+    end
+
+    def self.application_token
+      oauth_client.client_credentials.get_token
+    end
   end
 end
