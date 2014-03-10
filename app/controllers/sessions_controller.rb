@@ -13,6 +13,6 @@ class SessionsController < ApplicationController
 
   def failure
     response.headers['X-Frame-Options'] = '' if BookingSync::Engine.embedded
-    @error_message = params[:message].humanize
+    @error_message = params[:message].try(:humanize)
   end
 end
