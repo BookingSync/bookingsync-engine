@@ -5,6 +5,7 @@ module BookingSync::Engine::Helpers
       :sign_out_if_inactive
     helper_method :current_account
     rescue_from OAuth2::Error, with: :handle_oauth_error
+    rescue_from BookingSync::API::Unauthorized, with: :reset_authorization!
   end
 
   private
@@ -35,14 +36,18 @@ module BookingSync::Engine::Helpers
 
   def handle_oauth_error(error)
     if error.code == "Not authorized"
-      if current_account
-        current_account.clear_token!
-        clear_account_id_authorization!
-        redirect_to "/auth/bookingsync"
-      end
+      current_account.try(:clear_token!)
+      reset_authorization!
     else
       raise
     end
+  end
+
+  def reset_authorization!
+    session[:_bookingsync_account_id] =
+      params[:account_id].presence || session[:account_id]
+    clear_account_id_authorization!
+    redirect_to "/auth/bookingsync"
   end
 
   def current_account
