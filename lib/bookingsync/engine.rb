@@ -35,6 +35,9 @@ module BookingSync
     cattr_accessor :embedded
     self.embedded = true
 
+    cattr_accessor :sign_out_after
+    self.sign_out_after = 10.minutes
+
     def self.embedded!
       self.embedded = true
     end

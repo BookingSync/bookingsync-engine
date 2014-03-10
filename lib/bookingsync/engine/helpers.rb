@@ -1,12 +1,25 @@
 module BookingSync::Engine::Helpers
   extend ActiveSupport::Concern
   included do
-    before_action :store_bookingsync_account_id, :enforce_account_id
+    before_action :store_bookingsync_account_id, :enforce_account_id,
+      :sign_out_if_inactive
     helper_method :current_account
     rescue_from OAuth2::Error, with: :handle_oauth_error
   end
 
   private
+
+  def sign_out_if_inactive
+    return unless BookingSync::Engine.embedded
+
+    last_visit = session[:_bookingsync_last_visit]
+    session[:_bookingsync_last_visit] = Time.now.to_i
+
+    if last_visit && (Time.now.to_i - last_visit > BookingSync::Engine.sign_out_after)
+      clear_account_id_authorization!
+      redirect_to "/auth/bookingsync"
+    end
+  end
 
   def store_bookingsync_account_id
     session[:_bookingsync_account_id] = params.delete(:_bookingsync_account_id)
