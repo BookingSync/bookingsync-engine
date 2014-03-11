@@ -9,7 +9,8 @@ To get started, add the `bookingsync-engine` gem to your Gemfile.
 Then, generate a migration for the `Account` class:
 
 ```
-$ rails g migration CreateAccounts provider:string uid:integer:index name:string oauth_access_token:string oauth_refresh_token:string oauth_expires_at:string
+$ rails g migration CreateAccounts provider:string uid:integer:index \
+  name:string oauth_access_token:string oauth_refresh_token:string oauth_expires_at:string
 $ rake db:migrate
 ```
 
