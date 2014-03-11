@@ -2,12 +2,12 @@ class SessionsController < ApplicationController
   def create
     auth = request.env["omniauth.auth"]
     account = ::Account.from_omniauth(auth)
-    account_id_authorized!(account.uid)
+    account_authorized(account)
     redirect_to after_bookingsync_sign_in_path, notice: "Signed in!"
   end
 
   def destroy
-    clear_account_id_authorization!
+    clear_authorization!
     redirect_to after_bookingsync_sign_out_path, notice: "Signed out"
   end
 
