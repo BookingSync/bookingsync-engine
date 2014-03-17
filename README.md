@@ -7,6 +7,10 @@
 
 This engine requires Rails `>= 4.0.0` and Ruby `>= 2.0.0`.
 
+## Documentation
+
+[API documentation is available at rdoc.info](http://rdoc.info/github/BookingSync/bookingsync-engine/master/frames).
+
 ## Instalation
 
 To get started, add the `bookingsync-engine` gem to your Gemfile.
