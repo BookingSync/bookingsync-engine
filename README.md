@@ -13,14 +13,23 @@ This engine requires Rails `>= 4.0.0` and Ruby `>= 2.0.0`.
 
 ## Instalation
 
-To get started, add the `bookingsync-engine` gem to your Gemfile.
+BookingSync Engine works with Rails 4.0 onwards and Ruby 2.0 onwards. To get started, add it to your Gemfile with:
+
+```ruby
+gem 'bookingsync-engine'
+```
 
 Then, generate a migration for the `Account` class:
 
+```console
+rails g migration CreateAccounts provider:string uid:integer:index \
+name:string oauth_access_token:string oauth_refresh_token:string oauth_expires_at:string
 ```
-$ rails g migration CreateAccounts provider:string uid:integer:index \
-  name:string oauth_access_token:string oauth_refresh_token:string oauth_expires_at:string
-$ rake db:migrate
+
+and migrate:
+
+```console
+rake db:migrate
 ```
 
 ## Configuration
