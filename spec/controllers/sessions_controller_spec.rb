@@ -46,7 +46,7 @@ describe SessionsController do
     context "when Engine is standalone" do
       before { BookingSync::Engine.standalone! }
 
-      it "leaves X-Frame-Options without chage" do
+      it "leaves X-Frame-Options without change" do
         get :failure
         expect(response.headers["X-Frame-Options"]).to eql("SAMEORIGIN")
       end
