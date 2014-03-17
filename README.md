@@ -1,6 +1,11 @@
 [![Code Climate](https://codeclimate.com/github/BookingSync/bookingsync-engine.png)](https://codeclimate.com/github/BookingSync/bookingsync-engine)
+[![Build Status](https://travis-ci.org/BookingSync/bookingsync-engine.png?branch=master)](https://travis-ci.org/BookingSync/bookingsync-engine)
 
 # BookingSync Engine
+
+## Requirements
+
+This engine requires Rails `>= 4.0.0` and Ruby `>= 2.0.0`.
 
 ## Instalation
 
