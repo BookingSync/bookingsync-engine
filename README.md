@@ -47,6 +47,11 @@ The engine is set up by default to work with Embedded app for the BookingSync
 app store. This means that the OAuth flow will redirect using javascript
 redirect to break out of the iframe.
 
+Embedded apps will need to allow BookingSync to load them in an
+[iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe).
+This only has to be applied to the part of the application used in BookingSync,
+and can be done with the `allow_bookingsync_iframe` controller helper.
+
 **This default behavior breaks standalone applications**
 
 For standalone applications, you must set the standalone mode by adding
@@ -55,3 +60,10 @@ the following code to an initializer:
 ```ruby
 BookingSync::Engine.standalone!
 ```
+
+## Authentication in apps
+
+The engine provides a controller method `authenticate_account!` that can be
+used as a `before_filter`. It will make sure an account is authenticated
+(using OAuth), and then expose the authenticated account in the
+`current_account` method.

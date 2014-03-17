@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    response.headers['X-Frame-Options'] = '' if BookingSync::Engine.embedded
+    allow_bookingsync_iframe
     @error_message = params[:message].try(:humanize)
   end
 end

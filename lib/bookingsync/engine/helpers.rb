@@ -10,6 +10,6 @@ module BookingSync::Engine::Helpers
   #
   # This should set ALLOW-FROM, but it's not supported in Chrome and Safari.
   def allow_bookingsync_iframe
-    response.headers['X-Frame-Options'] = ''
+    response.headers['X-Frame-Options'] = '' if ::BookingSync::Engine.embedded
   end
 end
