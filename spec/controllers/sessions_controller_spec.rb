@@ -17,8 +17,9 @@ describe SessionsController do
     end
 
     it "redirects to after_bookingsync_sign_in_path" do
+      expect(controller).to receive(:after_bookingsync_sign_in_path).and_return("/admin")
       get :create, provider: :bookingsync
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to("/admin")
     end
   end
 
@@ -29,8 +30,9 @@ describe SessionsController do
     end
 
     it "redirects to after_bookingsync_sign_out_path" do
+      expect(controller).to receive(:after_bookingsync_sign_out_path).and_return("/signed_out")
       get :destroy
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to("/signed_out")
     end
   end
 
