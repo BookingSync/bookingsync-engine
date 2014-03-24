@@ -1,10 +1,6 @@
 module BookingSync::Engine::SessionHelpers
   extend ActiveSupport::Concern
 
-  included do
-    before_action :sign_out_if_inactive
-  end
-
   private
 
   # Automatically resets authorization when the session goes inactive.
@@ -16,7 +12,7 @@ module BookingSync::Engine::SessionHelpers
     session[:_bookingsync_last_visit] = Time.now.to_i
 
     if last_visit && (Time.now.to_i - last_visit > BookingSync::Engine.sign_out_after)
-      reset_authorization!
+      clear_authorization!
     end
   end
 end

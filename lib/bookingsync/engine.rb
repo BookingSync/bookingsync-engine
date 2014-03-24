@@ -28,14 +28,14 @@ module BookingSync
 
     initializer "bookingsync.controller_helper" do |app|
       require "bookingsync/engine/helpers"
-      require "bookingsync/engine/auth_helpers"
       require "bookingsync/engine/session_helpers"
+      require "bookingsync/engine/auth_helpers"
       require "bookingsync/engine/token_helpers"
 
       ActiveSupport.on_load :action_controller do
         include BookingSync::Engine::Helpers
-        include BookingSync::Engine::AuthHelpers
         include BookingSync::Engine::SessionHelpers
+        include BookingSync::Engine::AuthHelpers
         include BookingSync::Engine::TokenHelpers
       end
     end
