@@ -2,7 +2,6 @@ module BookingSync::Engine::AuthHelpers
   extend ActiveSupport::Concern
 
   included do
-    before_action :store_bookingsync_account_id, :enforce_requested_account_authorized!
     rescue_from OAuth2::Error, with: :handle_oauth_error
     rescue_from BookingSync::API::Unauthorized, with: :reset_authorization!
     helper_method :current_account
@@ -86,10 +85,14 @@ module BookingSync::Engine::AuthHelpers
 
   # Requests authorization if not currently authorized.
   def authenticate_account!
+    store_bookingsync_account_id
+    sign_out_if_inactive
+    enforce_requested_account_authorized!
     request_authorization! unless current_account
   end
 
   def store_bookingsync_account_id # :nodoc:
+    return unless BookingSync::Engine.embedded
     session[:_bookingsync_account_id] = params.delete(:_bookingsync_account_id)
   end
 end
