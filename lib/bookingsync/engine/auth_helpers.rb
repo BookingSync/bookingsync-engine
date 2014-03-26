@@ -85,14 +85,13 @@ module BookingSync::Engine::AuthHelpers
 
   # Requests authorization if not currently authorized.
   def authenticate_account!
-    store_bookingsync_account_id
+    store_bookingsync_account_id if BookingSync::Engine.embedded
     sign_out_if_inactive
     enforce_requested_account_authorized!
     request_authorization! unless current_account
   end
 
   def store_bookingsync_account_id # :nodoc:
-    return unless BookingSync::Engine.embedded
     session[:_bookingsync_account_id] = params.delete(:_bookingsync_account_id)
   end
 end
