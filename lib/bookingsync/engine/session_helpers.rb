@@ -1,3 +1,5 @@
+require 'useragent'
+
 module BookingSync::Engine::SessionHelpers
   extend ActiveSupport::Concern
 
@@ -26,7 +28,7 @@ module BookingSync::Engine::SessionHelpers
   # which tells safari to load the app's cookies. Then the normal OAuth
   # process can continue.
   def safari_iframe_cookie_fix
-    if request.user_agent =~ /Safari/
+    if UserAgent.parse(request.user_agent).browser == "Safari"
       return if session[:safari_iframe_cookie_fixed]
 
       if params[:safari_iframe_cookie_fix].present?
