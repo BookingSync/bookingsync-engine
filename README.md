@@ -92,7 +92,7 @@ current_account
 
 You should make sure session cookies for you application have the `secure`
 flag. This will be done by Rails automatically if you have configured
-your enfironment with `config.force_ssl = true`. If not, you can change your
+your environment with `config.force_ssl = true`. If not, you can change your
 `session_store.rb` initializer:
 
 ```ruby
