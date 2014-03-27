@@ -3,7 +3,7 @@ PATH
   specs:
     bookingsync-engine (0.0.1)
       bookingsync-api (>= 0.0.3)
-      omniauth-bookingsync (~> 0.1.0)
+      omniauth-bookingsync (~> 0.2.0)
       rails (>= 4.0.0)
 
 GEM
@@ -91,7 +91,7 @@ GEM
     omniauth (1.2.1)
       hashie (>= 1.2, < 3)
       rack (~> 1.0)
-    omniauth-bookingsync (0.1.0)
+    omniauth-bookingsync (0.2.0)
       omniauth (~> 1.1)
       omniauth-oauth2 (~> 1.1)
     omniauth-oauth2 (1.1.2)
