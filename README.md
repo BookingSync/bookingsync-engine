@@ -85,3 +85,17 @@ To retrieve the current signed-in account, this helper is available:
 ```ruby
 current_account
 ```
+
+## Securing applications
+
+### Session cookies
+
+You should make sure session cookies for you application have the `secure`
+flag. This will be done by Rails automatically if you have configured
+your enfironment with `config.force_ssl = true`. If not, you can change your
+`session_store.rb` initializer:
+
+```ruby
+Rails.application.config.session_store :cookie_store,
+  key: '_your-app_session', secure: true
+```
