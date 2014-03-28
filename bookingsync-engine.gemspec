@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", ">= 4.0.0"
-  s.add_dependency "omniauth-bookingsync", '~> 0.1.0'
+  s.add_dependency "omniauth-bookingsync", '~> 0.2.0'
   s.add_dependency "bookingsync-api", ">= 0.0.3"
 
   s.add_development_dependency "sqlite3"

@@ -52,7 +52,13 @@ module BookingSync::Engine::AuthHelpers
   end
 
   def request_authorization!
-    redirect_to "/auth/bookingsync"
+    if BookingSync::Engine.embedded
+      allow_bookingsync_iframe
+      path = "/auth/bookingsync/?account_id=#{session[:_bookingsync_account_id]}"
+      render text: "<script type='text/javascript'>top.location.href = '#{path}';</script>"
+    else
+      redirect_to "/auth/bookingsync"
+    end
   end
 
   # Handler to rescue OAuth errors
