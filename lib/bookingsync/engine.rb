@@ -9,6 +9,7 @@ module BookingSync
         provider :bookingsync,
           ENV['BOOKINGSYNC_APP_ID'],
           ENV['BOOKINGSYNC_APP_SECRET'],
+          scope: ENV['BOOKINGSYNC_SCOPE'],
           setup: -> (env) {
             if url = ENV['BOOKINGSYNC_URL']
               env['omniauth.strategy'].options[:client_options].site = url
