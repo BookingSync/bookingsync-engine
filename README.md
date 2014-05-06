@@ -39,8 +39,8 @@ The engine is configured by the following ENV variables:
 * `BOOKINGSYNC_URL` - the url of the website, should be
 * `BOOKINGSYNC_APP_ID` - OAuth application id
 * `BOOKINGSYNC_APP_SECRET` - OAuth application secret
-* `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test). Default to false
-* `BOOKINGSYNC_SCOPE` - Comma separated list of required scopes. Defaults to nil, which means the public scope.
+* `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test, but not required). Default to false
+* `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
 
 ## Embedded vs Standalone apps
 
@@ -50,7 +50,7 @@ redirect to break out of the iframe.
 ### Embedded apps
 
 Embedded apps will need to allow BookingSync to load them in an
-[iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe).
+[iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe). Redirect uri and Admin url are **required** for this type of application.
 
 **This only has to be applied to the part of the application used in BookingSync**
 
