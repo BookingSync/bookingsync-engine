@@ -88,3 +88,5 @@ module BookingSync
     end
   end
 end
+
+require "bookingsync/engine/model"

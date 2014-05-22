@@ -19,17 +19,26 @@ BookingSync Engine works with Rails 4.0 onwards and Ruby 2.0 onwards. To get sta
 gem 'bookingsync-engine'
 ```
 
-Then, generate a migration for the `Account` class:
+Then, generate a migration to add OAuth fields for the `Account` class:
 
 ```console
-rails g migration CreateAccounts provider:string uid:integer:index \
-name:string oauth_access_token:string oauth_refresh_token:string oauth_expires_at:string
+rails g migration AddOAuthFieldsToAccounts provider:string uid:integer:index \
+  name:string oauth_access_token:string oauth_refresh_token:string \
+  oauth_expires_at:string
 ```
 
 and migrate:
 
 ```console
 rake db:migrate
+```
+
+And include `BookingSync::Engine::Account` in your `Account` model:
+
+```ruby
+class Account < ActiveRecord::Base
+  include BookingSync::Engine::Model
+end
 ```
 
 ## Configuration
