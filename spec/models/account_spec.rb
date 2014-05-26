@@ -39,4 +39,16 @@ describe Account do
       expect(account.oauth_expires_at).to be_nil
     end
   end
+
+  describe "#api" do
+    it "returns API client initialized with OAuth token" do
+      token = double(token: "access_token", expired?: false)
+      allow(OAuth2::AccessToken).to receive(:new)
+        .and_return(token)
+      account = Account.new
+
+      expect(account.api).to be_kind_of(BookingSync::API::Client)
+      expect(account.api.token).to eq("access_token")
+    end
+  end
 end
