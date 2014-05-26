@@ -49,7 +49,7 @@ The engine is configured by the following ENV variables:
 * `BOOKINGSYNC_APP_ID` - OAuth application id
 * `BOOKINGSYNC_APP_SECRET` - OAuth application secret
 * `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test). Default to false
-* `BOOKINGSYNC_SCOPE` - Comma separated list of required scopes. Defaults to nil, which means the public scope.
+* `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
 
 ## Embedded vs Standalone apps
 
