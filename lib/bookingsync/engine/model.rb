@@ -35,6 +35,10 @@ module BookingSync::Engine::Model
     end
   end
 
+  def api
+    @api ||= BookingSync::API::Client.new(token.token)
+  end
+
   def update_token(token)
     self.oauth_access_token   = token.token
     self.oauth_refresh_token  = token.refresh_token
