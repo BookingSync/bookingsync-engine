@@ -11,15 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140312093436) do
+ActiveRecord::Schema.define(version: 20140522110454) do
 
   create_table "accounts", force: true do |t|
-    t.string  "provider"
-    t.integer "uid"
-    t.string  "name"
-    t.string  "oauth_access_token"
-    t.string  "oauth_refresh_token"
-    t.string  "oauth_expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "provider"
+    t.integer  "uid"
+    t.string   "name"
+    t.string   "oauth_access_token"
+    t.string   "oauth_refresh_token"
+    t.string   "oauth_expires_at"
   end
 
   add_index "accounts", ["uid"], name: "index_accounts_on_uid"
