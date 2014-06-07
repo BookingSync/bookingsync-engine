@@ -46,8 +46,8 @@ end
 The engine is configured by the following ENV variables:
 
 * `BOOKINGSYNC_URL` - the url of the website, should be
-* `BOOKINGSYNC_APP_ID` - OAuth application id
-* `BOOKINGSYNC_APP_SECRET` - OAuth application secret
+* `BOOKINGSYNC_APP_ID` - BookingSync Application's Client ID
+* `BOOKINGSYNC_APP_SECRET` - BookingSync Application's Client Secret
 * `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test). Default to false
 * `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
 
