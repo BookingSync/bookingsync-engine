@@ -14,11 +14,9 @@ module BookingSync
             if url = ENV['BOOKINGSYNC_URL']
               env['omniauth.strategy'].options[:client_options].site = url
             end
-            if Rails.env.development? || Rails.env.test?
-              env['omniauth.strategy'].options[:client_options].ssl = {
-                verify: ENV['BOOKINGSYNC_VERIFY_SSL'] == 'true'
-              }
-            end
+            env['omniauth.strategy'].options[:client_options].ssl = {
+              verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false'
+            }
           }
       end
     end
@@ -76,9 +74,7 @@ module BookingSync
         site: ENV['BOOKINGSYNC_URL'] || 'https://www.bookingsync.com',
         connection_opts: { headers: { accept: "application/vnd.api+json" } }
       }
-      if Rails.env.development? || Rails.env.test?
-        client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] == 'true' }
-      end
+      client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false' }
       OAuth2::Client.new(ENV['BOOKINGSYNC_APP_ID'], ENV['BOOKINGSYNC_APP_SECRET'],
         client_options)
     end
