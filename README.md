@@ -19,6 +19,18 @@ BookingSync Engine works with Rails 4.0 onwards and Ruby 2.0 onwards. To get sta
 gem 'bookingsync-engine'
 ```
 
+Then bundle install:
+
+```ruby
+bundle install
+```
+
+BookingSync Engine uses the `Account` model to authenticate each BookingSync Account, if you do not have an `Account` model yet, create one:
+
+```console
+rails g model Account
+```
+
 Then, generate a migration to add OAuth fields for the `Account` class:
 
 ```console
@@ -50,6 +62,9 @@ The engine is configured by the following ENV variables:
 * `BOOKINGSYNC_APP_SECRET` - BookingSync Application's Client Secret
 * `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test). Default to false
 * `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
+
+You might want to use [dotenv-rails](https://github.com/bkeepers/dotenv)
+to make ENV variables management easy.
 
 ## Embedded vs Standalone apps
 
@@ -85,7 +100,7 @@ BookingSync::Engine.standalone!
 BookingSync Engine will create some helpers to use inside your controllers and views. To set up a controller with BookingSync account authentication, just add this before_filter:
 
 ```ruby
-before_filter :authenticate_account!
+before_action :authenticate_account!
 ```
 It will make sure an account is authenticated (using OAuth).
 
