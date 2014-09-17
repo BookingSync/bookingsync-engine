@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SessionsController do
+RSpec.describe SessionsController, type: :controller do
   describe "GET create" do
     before do
       request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:bookingsync]

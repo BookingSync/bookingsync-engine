@@ -2,3 +2,7 @@ language: ruby
 rvm:
   - "2.0.0"
   - "2.1"
+gemfile:
+  - gemfiles/4.0.10.gemfile
+  - gemfiles/4.1.6.gemfile
+  - gemfiles/4.2.0.beta1.gemfile
