@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bookingsync-engine (0.1.1)
+    bookingsync-engine (0.1.2)
       bookingsync-api (>= 0.0.20)
       omniauth-bookingsync (~> 0.2.0)
       rails (>= 4.0.0)
@@ -41,7 +41,7 @@ GEM
       rake
       thor (>= 0.14.0)
     arel (5.0.1.20140414130214)
-    bookingsync-api (0.0.20)
+    bookingsync-api (0.0.21)
       addressable
       faraday (~> 0.9)
       hashie
@@ -67,7 +67,7 @@ GEM
     guard-rspec (4.2.8)
       guard (~> 2.1)
       rspec (>= 2.14, < 4.0)
-    hashie (3.2.0)
+    hashie (3.3.1)
     hike (1.2.3)
     i18n (0.6.11)
     json (1.8.1)
