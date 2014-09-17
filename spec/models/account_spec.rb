@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Account do
+RSpec.describe Account, type: :model do
   describe ".from_omniauth" do
     let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
 

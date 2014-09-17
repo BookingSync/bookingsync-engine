@@ -3,7 +3,8 @@ module BookingSync::Engine::Model
 
   module ClassMethods
     def from_omniauth(auth)
-      where(auth.slice(:provider, :uid)).first_or_initialize.tap do |account|
+      auth_params = auth.slice(:provider, :uid).permit(:provider, :uid)
+      where(auth_params).first_or_initialize.tap do |account|
         account.provider  = auth.provider
         account.uid       = auth.uid
         account.name      = auth.info.business_name

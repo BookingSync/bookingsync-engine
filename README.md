@@ -124,3 +124,11 @@ your environment with `config.force_ssl = true`. If not, you can change your
 Rails.application.config.session_store :cookie_store,
   key: '_your-app_session', secure: true
 ```
+
+## Contributing
+
+We would love to see you contributing. Please, just follow the guidelines from [https://github.com/BookingSync/contributing](https://github.com/BookingSync/contributing)
+
+### Testing
+
+By default, your tests will run against the Rails version used in the main Gemfile.lock, to test against all supported Rails version, please run the tests with Appraisals with: `appraisal rake spec`
