@@ -1,7 +1,21 @@
 require 'spec_helper'
 
 RSpec.describe Account, type: :model do
+  shared_examples "it takes attributes from auth" do
+    it "sets name" do
+      expect(account.name).to eq "business name"
+    end
+
+    it "sets token" do
+      expect(account.oauth_access_token).to eql("token")
+      expect(account.oauth_refresh_token).to eql("refresh token")
+      expect(account.oauth_expires_at).to eql("expires at")
+    end
+  end
+
   describe ".from_omniauth" do
+    before { Account.create!(provider: "bookingsync", uid: 456) }
+
     let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
 
     context "when account exists" do
@@ -11,17 +25,32 @@ RSpec.describe Account, type: :model do
         expect(Account.from_omniauth(auth)).to eql(account)
       end
 
-      it "updates account's name" do
-        Account.from_omniauth(auth)
-        expect(account.reload.name).to eql("business name")
+      describe "the updated account" do
+        before do
+          Account.from_omniauth(auth)
+          account.reload
+        end
+
+        it_behaves_like "it takes attributes from auth"
+      end
+    end
+
+    context "when account doesn't exist" do
+      it "creates new account" do
+        expect {
+          Account.from_omniauth(auth)
+        }.to change { Account.count }.by(1)
       end
 
-      it "updates account's token" do
-        Account.from_omniauth(auth)
-        account.reload
-        expect(account.oauth_access_token).to eql("token")
-        expect(account.oauth_refresh_token).to eql("refresh token")
-        expect(account.oauth_expires_at).to eql("expires at")
+      describe "the newly created account" do
+        let!(:account) { Account.from_omniauth(auth) }
+
+        it "sets uid and provider from auth" do
+          expect(account.uid).to eq 123
+          expect(account.provider).to eq "bookingsync"
+        end
+
+        it_behaves_like "it takes attributes from auth"
       end
     end
   end
