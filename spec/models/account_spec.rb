@@ -5,7 +5,13 @@ RSpec.describe Account, type: :model do
     let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
 
     context "when account exists" do
-      let!(:account) { Account.create!(provider: "bookingsync", uid: 123) }
+      let(:account) { Account.create!(provider: "bookingsync", uid: 123) }
+
+      before do
+        Account.create!(provider: "bookingsync", uid: 456)
+        Account.create!(provider: "other_provider", uid: 123)
+        account # create
+      end
 
       it "loads the existing account" do
         expect(Account.from_omniauth(auth)).to eql(account)
