@@ -55,12 +55,10 @@ module BookingSync::Engine::AuthHelpers
   def request_authorization!
     if request.xhr?
       request_authorization_for_xhr!
+    elsif BookingSync::Engine.embedded
+      request_authorization_for_embedded!
     else
-      if BookingSync::Engine.embedded
-        request_authorization_for_embedded!
-      else
-        request_authorization_for_standalone!
-      end
+      request_authorization_for_standalone!
     end
   end
 
