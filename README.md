@@ -97,13 +97,36 @@ BookingSync::Engine.standalone!
 
 ## Authentication in apps
 
-BookingSync Engine will create some helpers to use inside your controllers and views. To set up a controller with BookingSync account authentication, just add this before_filter:
+BookingSync Engine will create some helpers to use inside your controllers and views.
+
+### Ensure authentication
+
+To set up a controller with BookingSync account authentication, just add this `before_action`:
 
 ```ruby
 before_action :authenticate_account!
 ```
-It will make sure an account is authenticated (using OAuth).
+It will make sure an account is authenticated (using OAuth2).
 
+### New authorization process
+
+If the user is not currently authenticated, 3 responses can be expected:
+
+#### 1) Through Ajax requests
+
+By Ajax request, we consider them when the `X-Requested-With` header contains `XMLHttpRequest`.
+
+In this case, the authorization path will be returned a plain text with a **401 Unauthorized** status.
+
+#### 2) Embedded Application
+
+Embedded applications will be given a script tag forcing them to change their parent location to the authorization path. This is necessary so the authorization happens in the main window, not within an iFrame.
+
+#### 3) Standalone Application
+
+Standalone applications will simply be redirected to the authorization path.
+
+### Accessing the current account
 
 To retrieve the current signed-in account, this helper is available:
 

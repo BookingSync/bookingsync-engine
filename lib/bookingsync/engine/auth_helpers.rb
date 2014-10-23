@@ -51,14 +51,50 @@ module BookingSync::Engine::AuthHelpers
     request_authorization!
   end
 
+  # Request a new authorization.
   def request_authorization!
-    if BookingSync::Engine.embedded
-      allow_bookingsync_iframe
-      path = "/auth/bookingsync/?account_id=#{session[:_bookingsync_account_id]}"
-      render text: "<script type='text/javascript'>top.location.href = '#{path}';</script>"
+    if request.xhr?
+      request_authorization_for_xhr!
+    elsif BookingSync::Engine.embedded
+      request_authorization_for_embedded!
     else
-      redirect_to "/auth/bookingsync"
+      request_authorization_for_standalone!
     end
+  end
+
+  # Request a new authorization for Ajax requests.
+  #
+  # Renders the new authorization path with 401 Unauthorized status by default.
+  def request_authorization_for_xhr!
+    render text: new_authorization_url, status: :unauthorized
+  end
+
+  # Request a new authorization for Embedded Apps.
+  #
+  # Load the new authorization path using Javascript by default.
+  def request_authorization_for_embedded!
+    allow_bookingsync_iframe
+    render text: "<script type='text/javascript'>top.location.href = " +
+      "'#{new_authorization_path}';</script>"
+  end
+
+  # Request a new authorization for Standalone Apps.
+  #
+  # Redirects to new authorization path by default.
+  def request_authorization_for_standalone!
+    redirect_to new_authorization_path
+  end
+
+  # Path to which the user should be redirected to start a new
+  # Authorization process.
+  #
+  # Default to /auth/bookingsync/?account_id=SESSION_BOOKINGSYNC_ACCOUNT_ID
+  def new_authorization_path
+    "/auth/bookingsync/?account_id=#{session[:_bookingsync_account_id]}"
+  end
+
+  def new_authorization_url
+    request.base_url + new_authorization_path
   end
 
   # Handler to rescue OAuth errors
