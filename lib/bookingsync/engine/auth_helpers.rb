@@ -66,7 +66,7 @@ module BookingSync::Engine::AuthHelpers
   #
   # Renders the new authorization path with 401 Unauthorized status by default.
   def request_authorization_for_xhr!
-    render text: new_authorization_path, status: :unauthorized
+    render text: new_authorization_url, status: :unauthorized
   end
 
   # Request a new authorization for Embedded Apps.
@@ -91,6 +91,10 @@ module BookingSync::Engine::AuthHelpers
   # Default to /auth/bookingsync/?account_id=SESSION_BOOKINGSYNC_ACCOUNT_ID
   def new_authorization_path
     "/auth/bookingsync/?account_id=#{session[:_bookingsync_account_id]}"
+  end
+
+  def new_authorization_url
+    request.base_url + new_authorization_path
   end
 
   # Handler to rescue OAuth errors

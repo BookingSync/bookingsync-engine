@@ -19,6 +19,7 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "redirects to auth using 302 redirect" do
         get :index
         expect(response.status).to eq(302)
+        expect(response.redirect_url).to eq("http://test.host/auth/bookingsync/?account_id=")
         expect(response.body).to eq(
           "<html><body>You are being <a href=\"http://test.host/auth/bookingsync/?account_id=\">redirected</a>.</body></html>")
       end
@@ -32,7 +33,7 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "renders the target url in response" do
         xhr :get, :index
         expect(response.status).to eq(401)
-        expect(response.body).to eq("/auth/bookingsync/?account_id=")
+        expect(response.body).to eq("http://test.host/auth/bookingsync/?account_id=")
       end
     end
 
@@ -42,7 +43,7 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "renders the target url in response" do
         xhr :get, :index
         expect(response.status).to eq(401)
-        expect(response.body).to eq("/auth/bookingsync/?account_id=")
+        expect(response.body).to eq("http://test.host/auth/bookingsync/?account_id=")
       end
     end
   end
