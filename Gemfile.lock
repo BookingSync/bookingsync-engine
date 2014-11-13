@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     bookingsync-engine (0.2.0)
-      bookingsync-api (>= 0.0.20)
+      bookingsync-api (>= 0.0.22)
       omniauth-bookingsync (~> 0.2.0)
       rails (>= 4.0.0)
 
@@ -41,7 +41,7 @@ GEM
       rake
       thor (>= 0.14.0)
     arel (5.0.1.20140414130214)
-    bookingsync-api (0.0.21)
+    bookingsync-api (0.0.22)
       addressable
       faraday (~> 0.9)
       hashie
@@ -78,7 +78,7 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     lumberjack (1.0.4)
-    mail (2.6.1)
+    mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
     mime-types (2.4.3)
@@ -153,7 +153,7 @@ GEM
       rspec-support (~> 3.1.0)
     rspec-support (3.1.0)
     slop (3.5.0)
-    sprockets (2.12.2)
+    sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
