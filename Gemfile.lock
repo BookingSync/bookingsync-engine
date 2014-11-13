@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bookingsync-engine (0.2.0)
+    bookingsync-engine (0.2.1)
       bookingsync-api (>= 0.0.22)
       omniauth-bookingsync (~> 0.2.0)
       rails (>= 4.0.0)
