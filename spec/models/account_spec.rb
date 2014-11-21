@@ -13,6 +13,10 @@ RSpec.describe Account, type: :model do
     end
   end
 
+  describe "validations" do
+    it { is_expected.to validate_uniqueness_of(:uid) }
+  end
+
   describe ".from_omniauth" do
     before { Account.create!(provider: "bookingsync", uid: 456) }
 

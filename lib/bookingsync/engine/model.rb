@@ -1,6 +1,10 @@
 module BookingSync::Engine::Model
   extend ActiveSupport::Concern
 
+  included do
+    validates :uid, uniqueness: true
+  end
+
   module ClassMethods
     def from_omniauth(auth)
       find_or_initialize_by(uid: auth.uid, provider: auth.provider).tap do |account|
