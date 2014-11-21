@@ -1,3 +1,7 @@
+# 0.2.2 (2014-11-21)
+
+* Ensure that account's UID is uniq
+
 # 0.2.1 (2014-11-13)
 
 * Require bookingsync-api 0.0.22 to support 403 errors
