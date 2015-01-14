@@ -1,3 +1,7 @@
+# 0.3.0 (2015-01-14)
+
+* BREAKING CHANGE: bookingsync-engine routes have to be mounted explicitly within the app with mount BookingSync::Engine => '/'
+
 # 0.2.2 (2014-11-21)
 
 * Ensure that account's UID is uniq
