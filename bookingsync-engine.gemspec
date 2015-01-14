@@ -15,6 +15,15 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
+  s.post_install_message = <<-MSG
+!!!!!! Important change !!!!!!
+BookingSync::Engine routes need to be mounted manually
+Just copy next line to somewhere inside routes.rb
+
+mount BookingSync::Engine => '/'
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+MSG
   s.add_dependency "rails", ">= 4.0.0"
   s.add_dependency "omniauth-bookingsync", '~> 0.2.0'
   s.add_dependency "bookingsync-api", ">= 0.0.22"

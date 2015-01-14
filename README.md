@@ -25,6 +25,11 @@ Then bundle install:
 bundle install
 ```
 
+Then BookingSync routes need to be mounted inside you apps routes.rb:
+```ruby
+mount BookingSync::Engine => '/'
+```
+
 BookingSync Engine uses the `Account` model to authenticate each BookingSync Account, if you do not have an `Account` model yet, create one:
 
 ```console
