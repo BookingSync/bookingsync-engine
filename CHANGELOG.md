@@ -1,3 +1,8 @@
+# master
+
+* Add BookingSync::Engine::APIClient that will automatically refresh tokens when the API
+  returns 401.
+
 # 0.3.0 (2015-01-14)
 
 * BREAKING CHANGE: bookingsync-engine routes have to be mounted explicitly within the app with mount BookingSync::Engine => '/'
