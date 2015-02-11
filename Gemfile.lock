@@ -46,8 +46,8 @@ GEM
       faraday (~> 0.9)
       hashie
     builder (3.2.2)
-    celluloid (0.15.2)
-      timers (~> 1.1.0)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     celluloid-io (0.15.0)
       celluloid (>= 0.15.0)
       nio4r (>= 0.5.0)
@@ -69,6 +69,7 @@ GEM
       rspec (>= 2.14, < 4.0)
     hashie (3.3.2)
     hike (1.2.3)
+    hitimes (1.2.2)
     i18n (0.6.11)
     json (1.8.1)
     jwt (1.2.0)
@@ -86,7 +87,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    nio4r (1.0.0)
+    nio4r (1.1.0)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -168,7 +169,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
-    timers (1.1.0)
+    timers (4.0.1)
+      hitimes
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
 
