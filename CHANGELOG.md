@@ -1,5 +1,7 @@
 # master
 
+# 0.4.1 (2015-02-12)
+
 * Fix Model#api to use the new APIClient class.
 
 # 0.4.0 (2015-02-12)
