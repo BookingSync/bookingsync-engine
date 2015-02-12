@@ -1,12 +1,14 @@
 # master
 
+# 0.4.3 (2015-02-12)
+
 * Fix infinite recursion when refreshing token.
 
-# 0.4.1 (2015-02-12)
+# 0.4.1 (2015-02-12) (yanked)
 
 * Fix Model#api to use the new APIClient class.
 
-# 0.4.0 (2015-02-12)
+# 0.4.0 (2015-02-12) (yanked)
 
 * Add BookingSync::Engine::APIClient that will automatically refresh tokens when the API
   returns 401.
