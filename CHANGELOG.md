@@ -1,5 +1,7 @@
 # master
 
+* Fix infinite recursion when refreshing token.
+
 # 0.4.1 (2015-02-12)
 
 * Fix Model#api to use the new APIClient class.

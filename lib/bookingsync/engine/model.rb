@@ -28,15 +28,15 @@ module BookingSync::Engine::Model
         oauth_access_token, token_options)
 
       if token.expired?
-        refresh_token!
+        refresh_token!(token)
       else
         token
       end
     end
   end
 
-  def refresh_token!
-    @token = token.refresh!.tap { |new_token| update_token!(new_token) }
+  def refresh_token!(current_token = token)
+    @token = current_token.refresh!.tap { |new_token| update_token!(new_token) }
   end
 
   def api

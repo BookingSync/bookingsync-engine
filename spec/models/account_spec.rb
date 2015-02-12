@@ -59,6 +59,46 @@ RSpec.describe Account, type: :model do
     end
   end
 
+  describe "#token" do
+    let(:expires_at) { 1.day.from_now.to_i }
+    let(:account) { Account.create!(uid: 123, oauth_access_token: "token",
+      oauth_refresh_token: "refresh_token", oauth_expires_at: expires_at) }
+
+    context "when the stored token is fresh" do
+      it "returns the token" do
+        expect(account.token).to be_a OAuth2::AccessToken
+        expect(account.token.token).to eq "token"
+      end
+    end
+
+    context "when the stored token is expired" do
+      let(:expires_at) { 1.day.ago.to_i.to_s }
+      let(:new_expires_at) { 2.days.from_now.to_i.to_s }
+      let(:token) { double(expired?: true, refresh!: double(token: "refreshed_token",
+        refresh_token: "refreshed_refresh_token", expires_at: new_expires_at)) }
+      let(:client) { double }
+
+      before do
+        expect(BookingSync::Engine).to receive(:oauth_client) { client }
+        expect(OAuth2::AccessToken).to receive(:new).with(client, "token",
+          refresh_token: "refresh_token", expires_at: expires_at) { token }
+      end
+
+      it "refreshes the token" do
+        expect(token).to receive(:refresh!)
+        account.token
+      end
+
+      it "stores the refreshed token" do
+        account.token
+        account.reload
+        expect(account.oauth_access_token).to eq("refreshed_token")
+        expect(account.oauth_refresh_token).to eq("refreshed_refresh_token")
+        expect(account.oauth_expires_at).to eq(new_expires_at)
+      end
+    end
+  end
+
   describe "#clear_token!" do
     it "clears token related fields on account" do
       account = Account.create!(oauth_access_token: "token",
