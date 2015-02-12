@@ -85,4 +85,5 @@ module BookingSync
   end
 end
 
+require "bookingsync/engine/api_client"
 require "bookingsync/engine/model"

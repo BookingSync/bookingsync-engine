@@ -3,6 +3,7 @@ module BookingSync::Engine::Model
 
   included do
     validates :uid, uniqueness: true
+    scope :authorized, -> { where.not(oauth_access_token: nil) }
   end
 
   module ClassMethods
@@ -27,16 +28,19 @@ module BookingSync::Engine::Model
         oauth_access_token, token_options)
 
       if token.expired?
-        token = token.refresh!
-        update_token!(token)
+        refresh_token!
+      else
+        token
       end
-
-      token
     end
   end
 
+  def refresh_token!
+    @token = token.refresh!.tap { |new_token| update_token!(new_token) }
+  end
+
   def api
-    @api ||= BookingSync::API::Client.new(token.token)
+    @api ||= BookingSync::API::Client.new(token.token, account: self)
   end
 
   def update_token(token)
