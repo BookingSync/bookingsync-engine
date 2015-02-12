@@ -1,5 +1,7 @@
 # master
 
+# 0.4.0 (2015-02-12)
+
 * Add BookingSync::Engine::APIClient that will automatically refresh tokens when the API
   returns 401.
 
