@@ -1,5 +1,7 @@
 # master
 
+* Fix Model#api to use the new APIClient class.
+
 # 0.4.0 (2015-02-12)
 
 * Add BookingSync::Engine::APIClient that will automatically refresh tokens when the API

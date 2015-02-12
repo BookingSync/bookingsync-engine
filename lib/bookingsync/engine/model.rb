@@ -40,7 +40,7 @@ module BookingSync::Engine::Model
   end
 
   def api
-    @api ||= BookingSync::API::Client.new(token.token, account: self)
+    @api ||= BookingSync::Engine::APIClient.new(token.token, account: self)
   end
 
   def update_token(token)
