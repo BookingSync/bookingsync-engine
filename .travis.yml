@@ -1,9 +1,10 @@
 language: ruby
+sudo: false
 rvm:
   - "2.0.0"
   - "2.1"
+  - "2.2"
 gemfile:
-  - gemfiles/4.0.11.gemfile
-  - gemfiles/4.1.7.gemfile
-  - gemfiles/4.2.0.beta4.gemfile
-script: "bundle install ; bundle exec rake spec"
+  - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
+script: "bundle exec rake spec"
