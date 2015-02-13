@@ -1,5 +1,7 @@
 # master
 
+# 0.4.4 (2015-02-13)
+
 * Don't capture all /auth/:provider/callback routes, only /auth/bookingsync/callback.
 
 # 0.4.3 (2015-02-12)
