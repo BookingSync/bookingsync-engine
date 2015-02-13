@@ -1,5 +1,7 @@
 # master
 
+* Don't capture all /auth/:provider/callback routes, only /auth/bookingsync/callback.
+
 # 0.4.3 (2015-02-12)
 
 * Fix infinite recursion when refreshing token.

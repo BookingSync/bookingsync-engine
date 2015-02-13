@@ -2,9 +2,13 @@ require 'spec_helper'
 
 describe 'oauth routing', type: :routing do
   routes { BookingSync::Engine.routes }
-  it 'has a auth callback route' do
-    expect(get: '/auth/facebook/callback').to route_to(controller: 'sessions',
-      action: 'create', provider: 'facebook')
+  it 'has a bookingsync auth callback route' do
+    expect(get: '/auth/bookingsync/callback').to route_to(controller: 'sessions', action: 'create')
+  end
+
+  it "doesn't capture auth callback routes for other providers" do
+    expect(get: '/auth/facebook/callback').to_not route_to(controller: 'sessions',
+      action: 'create')
   end
 
   it 'has a auth failure route' do
