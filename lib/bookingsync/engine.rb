@@ -21,7 +21,7 @@ module BookingSync
       end
     end
 
-    initializer "bookingsync.controller_helper" do |app|
+    config.to_prepare do
       require "bookingsync/engine/helpers"
       require "bookingsync/engine/session_helpers"
       require "bookingsync/engine/auth_helpers"
