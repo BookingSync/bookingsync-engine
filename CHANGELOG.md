@@ -1,5 +1,9 @@
 # master
 
+# 0.4.5 (2015-02-17)
+
+* Ensure code included when use multiple inderdependent engines.
+
 # 0.4.4 (2015-02-13)
 
 * Don't capture all /auth/:provider/callback routes, only /auth/bookingsync/callback.
