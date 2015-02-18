@@ -1,5 +1,7 @@
 # master
 
+# 0.4.6 (2015-02-18)
+
 * Fix gem autoloading, allows proper chaining.
 
 # 0.4.5 (2015-02-17)
