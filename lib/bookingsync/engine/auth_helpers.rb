@@ -1,4 +1,4 @@
-module BookingSync::Engine::AuthHelpers
+module Bookingsync::Engine::AuthHelpers
   extend ActiveSupport::Concern
 
   included do
@@ -55,7 +55,7 @@ module BookingSync::Engine::AuthHelpers
   def request_authorization!
     if request.xhr?
       request_authorization_for_xhr!
-    elsif BookingSync::Engine.embedded
+    elsif Bookingsync::Engine.embedded
       request_authorization_for_embedded!
     else
       request_authorization_for_standalone!
@@ -127,7 +127,7 @@ module BookingSync::Engine::AuthHelpers
 
   # Requests authorization if not currently authorized.
   def authenticate_account!
-    store_bookingsync_account_id if BookingSync::Engine.embedded
+    store_bookingsync_account_id if Bookingsync::Engine.embedded
     sign_out_if_inactive
     enforce_requested_account_authorized!
     request_authorization! unless current_account

@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe AuthenticatedController, type: :controller do
   describe "GET index" do
     context "when engine is embedded" do
-      before { BookingSync::Engine.embedded! }
+      before { Bookingsync::Engine.embedded! }
 
       it "redirects to auth using js" do
         get :index
@@ -14,7 +14,7 @@ RSpec.describe AuthenticatedController, type: :controller do
     end
 
     context "when engine is standalone" do
-      before { BookingSync::Engine.standalone! }
+      before { Bookingsync::Engine.standalone! }
 
       it "redirects to auth using 302 redirect" do
         get :index
@@ -28,7 +28,7 @@ RSpec.describe AuthenticatedController, type: :controller do
 
   describe "XHR index" do
     context "when engine is embedded" do
-      before { BookingSync::Engine.embedded! }
+      before { Bookingsync::Engine.embedded! }
 
       it "renders the target url in response" do
         xhr :get, :index
@@ -38,7 +38,7 @@ RSpec.describe AuthenticatedController, type: :controller do
     end
 
     context "when engine is standalone" do
-      before { BookingSync::Engine.standalone! }
+      before { Bookingsync::Engine.standalone! }
 
       it "renders the target url in response" do
         xhr :get, :index

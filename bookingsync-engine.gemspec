@@ -4,7 +4,7 @@ require "bookingsync/engine/version"
 
 Gem::Specification.new do |s|
   s.name        = "bookingsync-engine"
-  s.version     = BookingSync::ENGINE_VERSION
+  s.version     = Bookingsync::ENGINE_VERSION
   s.authors     = ["Sebastien Grosjean", "Grzesiek Kolodziejczyk"]
   s.email       = ["dev@bookingsync.com"]
   s.homepage    = "https://github.com/BookingSync/bookingsync-engine"

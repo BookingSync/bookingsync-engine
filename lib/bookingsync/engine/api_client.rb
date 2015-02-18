@@ -1,4 +1,4 @@
-class BookingSync::Engine::APIClient < BookingSync::API::Client
+class Bookingsync::Engine::APIClient < BookingSync::API::Client
   def initialize(token, options = {})
     super
     @account = options[:account]

@@ -1,4 +1,4 @@
-module BookingSync::Engine::TokenHelpers
+module Bookingsync::Engine::TokenHelpers
   extend ActiveSupport::Concern
 
   private
@@ -12,7 +12,7 @@ module BookingSync::Engine::TokenHelpers
   end
 
   # OAuth access token for the application. The token is obtained from
-  # {BookingSync::Engine#appliation_token}.
+  # {Bookingsync::Engine#appliation_token}.
   #
   # Will fetch new token if the current one is expired.
   #
@@ -24,7 +24,7 @@ module BookingSync::Engine::TokenHelpers
     token = Thread.current[:_bookingsync_application_token]
     if token.nil? || token.expired?
       token = Thread.current[:_bookingsync_application_token] =
-        BookingSync::Engine.application_token
+        Bookingsync::Engine.application_token
     end
     token
   end

@@ -2,8 +2,9 @@ require 'omniauth'
 require 'omniauth-bookingsync'
 require 'bookingsync-api'
 
-module BookingSync
+module Bookingsync
   class Engine < ::Rails::Engine
+    config.autoload_paths << File.expand_path("../..", __FILE__)
     initializer "bookingsync.add_omniauth" do |app|
       app.middleware.use OmniAuth::Builder do
         provider :bookingsync,
@@ -22,16 +23,11 @@ module BookingSync
     end
 
     initializer "bookingsync.controller_helper" do |app|
-      require "bookingsync/engine/helpers"
-      require "bookingsync/engine/session_helpers"
-      require "bookingsync/engine/auth_helpers"
-      require "bookingsync/engine/token_helpers"
-
       ActiveSupport.on_load :action_controller do
-        include BookingSync::Engine::Helpers
-        include BookingSync::Engine::SessionHelpers
-        include BookingSync::Engine::AuthHelpers
-        include BookingSync::Engine::TokenHelpers
+        include Bookingsync::Engine::Helpers
+        include Bookingsync::Engine::SessionHelpers
+        include Bookingsync::Engine::AuthHelpers
+        include Bookingsync::Engine::TokenHelpers
       end
     end
 
@@ -40,7 +36,7 @@ module BookingSync
     self.embedded = true
 
     # Duration of inactivity after which the authorization will be reset.
-    # See {BookingSync::Engine::SessionHelpers#sign_out_if_inactive}.
+    # See {Bookingsync::Engine::SessionHelpers#sign_out_if_inactive}.
     # @return [Fixnum]
     cattr_accessor :sign_out_after
     self.sign_out_after = 10.minutes
@@ -84,6 +80,3 @@ module BookingSync
     end
   end
 end
-
-require "bookingsync/engine/api_client"
-require "bookingsync/engine/model"

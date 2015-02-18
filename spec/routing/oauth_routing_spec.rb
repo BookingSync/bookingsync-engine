@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'oauth routing', type: :routing do
-  routes { BookingSync::Engine.routes }
+  routes { Bookingsync::Engine.routes }
   it 'has a bookingsync auth callback route' do
     expect(get: '/auth/bookingsync/callback').to route_to(controller: 'sessions', action: 'create')
   end

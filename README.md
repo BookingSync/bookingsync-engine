@@ -1,7 +1,7 @@
 [![Code Climate](https://codeclimate.com/github/BookingSync/bookingsync-engine.png)](https://codeclimate.com/github/BookingSync/bookingsync-engine)
 [![Build Status](https://travis-ci.org/BookingSync/bookingsync-engine.png?branch=master)](https://travis-ci.org/BookingSync/bookingsync-engine)
 
-# BookingSync Engine
+# Bookingsync Engine
 
 ## Requirements
 
@@ -13,7 +13,7 @@ This engine requires Rails `>= 4.0.0` and Ruby `>= 2.0.0`.
 
 ## Installation
 
-BookingSync Engine works with Rails 4.0 onwards and Ruby 2.0 onwards. To get started, add it to your Gemfile with:
+Bookingsync Engine works with Rails 4.0 onwards and Ruby 2.0 onwards. To get started, add it to your Gemfile with:
 
 ```ruby
 gem 'bookingsync-engine'
@@ -30,7 +30,7 @@ Then BookingSync routes need to be mounted inside you apps routes.rb:
 mount BookingSync::Engine => '/'
 ```
 
-BookingSync Engine uses the `Account` model to authenticate each BookingSync Account, if you do not have an `Account` model yet, create one:
+Bookingsync Engine uses the `Account` model to authenticate each BookingSync Account, if you do not have an `Account` model yet, create one:
 
 ```console
 rails g model Account
@@ -102,7 +102,7 @@ BookingSync::Engine.standalone!
 
 ## Authentication in apps
 
-BookingSync Engine will create some helpers to use inside your controllers and views.
+Bookingsync Engine will create some helpers to use inside your controllers and views.
 
 ### Ensure authentication
 

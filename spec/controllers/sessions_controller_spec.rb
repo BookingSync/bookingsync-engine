@@ -38,7 +38,7 @@ RSpec.describe SessionsController, type: :controller do
 
   describe "GET failure" do
     context "when Engine is embedded" do
-      before { BookingSync::Engine.embedded! }
+      before { Bookingsync::Engine.embedded! }
       it "clears X-Frame-Options" do
         get :failure, use_route: 'bookingsync'
         expect(response.headers["X-Frame-Options"]).to eql("")
@@ -46,7 +46,7 @@ RSpec.describe SessionsController, type: :controller do
     end
 
     context "when Engine is standalone" do
-      before { BookingSync::Engine.standalone! }
+      before { Bookingsync::Engine.standalone! }
 
       it "leaves X-Frame-Options without change" do
         get :failure, use_route: 'bookingsync'

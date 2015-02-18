@@ -1,4 +1,4 @@
-module BookingSync::Engine::Model
+module Bookingsync::Engine::Model
   extend ActiveSupport::Concern
 
   included do
@@ -24,7 +24,7 @@ module BookingSync::Engine::Model
         token_options[:expires_at]    = oauth_expires_at
       end
 
-      token = OAuth2::AccessToken.new(BookingSync::Engine.oauth_client,
+      token = OAuth2::AccessToken.new(Bookingsync::Engine.oauth_client,
         oauth_access_token, token_options)
 
       if token.expired?
@@ -40,7 +40,7 @@ module BookingSync::Engine::Model
   end
 
   def api
-    @api ||= BookingSync::Engine::APIClient.new(token.token, account: self)
+    @api ||= Bookingsync::Engine::APIClient.new(token.token, account: self)
   end
 
   def update_token(token)

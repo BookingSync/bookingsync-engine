@@ -1,4 +1,4 @@
 require "bookingsync/engine"
 
-module BookingSync
+module Bookingsync
 end

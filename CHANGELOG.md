@@ -1,5 +1,7 @@
 # master
 
+* Rename main module from BookingSync to Bookingsync so that it can benefit from rails autoloading mechanisms.
+
 # 0.4.6 (2015-02-18)
 
 * Fix gem autoloading, allows proper chaining.

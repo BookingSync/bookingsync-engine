@@ -1,5 +1,5 @@
-# General helpers related to integrating applications with BookingSync
-module BookingSync::Engine::Helpers
+# General helpers related to integrating applications with Bookingsync
+module Bookingsync::Engine::Helpers
   extend ActiveSupport::Concern
 
   private
@@ -10,6 +10,6 @@ module BookingSync::Engine::Helpers
   #
   # This should set ALLOW-FROM, but it's not supported in Chrome and Safari.
   def allow_bookingsync_iframe
-    response.headers['X-Frame-Options'] = '' if ::BookingSync::Engine.embedded
+    response.headers['X-Frame-Options'] = '' if ::Bookingsync::Engine.embedded
   end
 end

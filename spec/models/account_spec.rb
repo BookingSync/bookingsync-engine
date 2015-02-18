@@ -79,7 +79,7 @@ RSpec.describe Account, type: :model do
       let(:client) { double }
 
       before do
-        expect(BookingSync::Engine).to receive(:oauth_client) { client }
+        expect(Bookingsync::Engine).to receive(:oauth_client) { client }
         expect(OAuth2::AccessToken).to receive(:new).with(client, "token",
           refresh_token: "refresh_token", expires_at: expires_at) { token }
       end
