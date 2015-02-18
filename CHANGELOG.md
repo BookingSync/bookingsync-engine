@@ -1,5 +1,7 @@
 # master
 
+* Fix gem autoloading, allows proper chaining.
+
 # 0.4.5 (2015-02-17)
 
 * Ensure code included when use multiple inderdependent engines.
