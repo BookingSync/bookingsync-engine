@@ -72,6 +72,8 @@ RSpec.describe Account, type: :model do
     end
 
     context "when the stored token is expired" do
+      self.use_transactional_fixtures = false
+
       let(:expires_at) { 1.day.ago.to_i.to_s }
       let(:new_expires_at) { 2.days.from_now.to_i.to_s }
       let(:token) { double(expired?: true, refresh!: double(token: "refreshed_token",
@@ -95,6 +97,10 @@ RSpec.describe Account, type: :model do
         expect(account.oauth_access_token).to eq("refreshed_token")
         expect(account.oauth_refresh_token).to eq("refreshed_refresh_token")
         expect(account.oauth_expires_at).to eq(new_expires_at)
+      end
+
+      after do
+        Account.destroy_all
       end
     end
   end
