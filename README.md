@@ -50,13 +50,15 @@ and migrate:
 rake db:migrate
 ```
 
-And include `BookingSync::Engine::Account` in your `Account` model:
+Also include `BookingSync::Engine::Account` in your `Account` model:
 
 ```ruby
 class Account < ActiveRecord::Base
   include BookingSync::Engine::Model
 end
 ```
+
+When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
 
 ## Configuration
 

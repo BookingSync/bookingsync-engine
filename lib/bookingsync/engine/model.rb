@@ -50,8 +50,12 @@ module BookingSync::Engine::Model
   end
 
   def update_token!(token)
-    update_token(token)
-    save!
+    Thread.new do
+      ActiveRecord::Base.connection_pool.with_connection do
+        update_token(token)
+        save!
+      end
+    end.join
   end
 
   def clear_token!
