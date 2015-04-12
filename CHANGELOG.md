@@ -1,5 +1,7 @@
 # master
 
+# 0.5.0 (2015-04-12)
+
 * Use new thread to ensure refresh_token update during transaction.
 
 # 0.4.6 (2015-02-18)
