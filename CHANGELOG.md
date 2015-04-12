@@ -1,5 +1,7 @@
 # master
 
+* Use new thread to ensure refresh_token update during transaction.
+
 # 0.4.6 (2015-02-18)
 
 * Fix gem autoloading, allows proper chaining.

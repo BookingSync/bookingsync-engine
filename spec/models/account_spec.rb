@@ -61,7 +61,7 @@ RSpec.describe Account, type: :model do
 
   describe "#token" do
     let(:expires_at) { 1.day.from_now.to_i }
-    let(:account) { Account.create!(uid: 123, oauth_access_token: "token",
+    let!(:account) { Account.create!(uid: 123, oauth_access_token: "token",
       oauth_refresh_token: "refresh_token", oauth_expires_at: expires_at) }
 
     context "when the stored token is fresh" do
@@ -72,6 +72,8 @@ RSpec.describe Account, type: :model do
     end
 
     context "when the stored token is expired" do
+      self.use_transactional_fixtures = false
+
       let(:expires_at) { 1.day.ago.to_i.to_s }
       let(:new_expires_at) { 2.days.from_now.to_i.to_s }
       let(:token) { double(expired?: true, refresh!: double(token: "refreshed_token",
@@ -84,13 +86,21 @@ RSpec.describe Account, type: :model do
           refresh_token: "refresh_token", expires_at: expires_at) { token }
       end
 
+      after do
+        Account.destroy_all
+      end
+
       it "refreshes the token" do
         expect(token).to receive(:refresh!)
         account.token
       end
 
-      it "stores the refreshed token" do
-        account.token
+      it "stores the refreshed token even with rollback" do
+        Account.transaction do
+          account.token
+          raise ActiveRecord::Rollback
+        end
+
         account.reload
         expect(account.oauth_access_token).to eq("refreshed_token")
         expect(account.oauth_refresh_token).to eq("refreshed_refresh_token")
