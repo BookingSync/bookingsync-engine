@@ -1,5 +1,7 @@
 # master
 
+* Update appraisals gemfiles to match version 0.5.0.
+
 # 0.5.0 (2015-04-12)
 
 * Use new thread to ensure refresh_token update during transaction.
