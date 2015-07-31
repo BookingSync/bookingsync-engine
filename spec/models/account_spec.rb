@@ -14,16 +14,16 @@ RSpec.describe Account, type: :model do
   end
 
   describe "validations" do
-    it { is_expected.to validate_uniqueness_of(:uid) }
+    it { is_expected.to validate_uniqueness_of(:synced_id) }
   end
 
   describe ".from_omniauth" do
-    before { Account.create!(provider: "bookingsync", uid: 456) }
+    before { Account.create!(provider: "bookingsync", synced_id: 456) }
 
     let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
 
     context "when account exists" do
-      let!(:account) { Account.create!(provider: "bookingsync", uid: 123) }
+      let!(:account) { Account.create!(provider: "bookingsync", synced_id: 123) }
 
       it "loads the existing account" do
         expect(Account.from_omniauth(auth)).to eql(account)
@@ -49,8 +49,8 @@ RSpec.describe Account, type: :model do
       describe "the newly created account" do
         let!(:account) { Account.from_omniauth(auth) }
 
-        it "sets uid and provider from auth" do
-          expect(account.uid).to eq 123
+        it "sets synced_id and provider from auth" do
+          expect(account.synced_id).to eq 123
           expect(account.provider).to eq "bookingsync"
         end
 
@@ -61,7 +61,7 @@ RSpec.describe Account, type: :model do
 
   describe "#token" do
     let(:expires_at) { 1.day.from_now.to_i }
-    let!(:account) { Account.create!(uid: 123, oauth_access_token: "token",
+    let!(:account) { Account.create!(synced_id: 123, oauth_access_token: "token",
       oauth_refresh_token: "refresh_token", oauth_expires_at: expires_at) }
 
     context "when the stored token is fresh" do

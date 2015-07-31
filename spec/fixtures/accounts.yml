@@ -2,7 +2,7 @@
 
 one:
   provider: MyString
-  uid: 1
+  synced_id: 1
   name: MyString
   oauth_access_token: MyString
   oauth_refresh_token: MyString
@@ -10,7 +10,7 @@ one:
 
 two:
   provider: MyString
-  uid: 1
+  synced_id: 1
   name: MyString
   oauth_access_token: MyString
   oauth_refresh_token: MyString

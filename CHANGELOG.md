@@ -1,5 +1,6 @@
 # master
 
+* BREAKING CHANGE: Rename account `synced_key` from `uid` to `synced_id`
 * Update appraisals gemfiles to match version 0.5.0.
 
 # 0.5.0 (2015-04-12)
