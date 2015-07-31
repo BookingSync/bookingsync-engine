@@ -1,7 +1,7 @@
 OmniAuth.config.test_mode = true
 OmniAuth.config.mock_auth[:bookingsync] = OmniAuth::AuthHash.new({
   provider: "bookingsync",
-  synced_id: 123,
+  uid: 123,
   info: {
     business_name: "business name"
   },
