@@ -8,7 +8,7 @@ module BookingSync::Engine::Model
 
   module ClassMethods
     def from_omniauth(auth)
-      find_or_initialize_by(synced_id: auth.synced_id, provider: auth.provider).tap do |account|
+      find_or_initialize_by(synced_id: auth.uid, provider: auth.provider).tap do |account|
         account.name = auth.info.business_name
         account.update_token(auth.credentials)
         account.save!
