@@ -11,16 +11,16 @@ module BookingSync::Engine::AuthHelpers
 
   # @return [Account, nil] currently authorized Account or nil if unauthorized
   def current_account
-    @current_account ||= ::Account.find_by(uid: session[:account_id]) if session[:account_id].present?
+    @current_account ||= ::Account.find_by(synced_id: session[:account_id]) if session[:account_id].present?
   end
 
   # Callback after account is authorized.
   #
-  # Stores the authorized account's uid in the session.
+  # Stores the authorized account's synced_id in the session.
   #
   # @param account [Account] the just authorized account
   def account_authorized(account)
-    session[:account_id] = account.uid.to_s
+    session[:account_id] = account.synced_id.to_s
   end
 
   # Clear authorization if the account passed from the BookingSync app store

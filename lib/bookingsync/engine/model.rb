@@ -2,13 +2,13 @@ module BookingSync::Engine::Model
   extend ActiveSupport::Concern
 
   included do
-    validates :uid, uniqueness: true
+    validates :synced_id, uniqueness: true
     scope :authorized, -> { where.not(oauth_access_token: nil) }
   end
 
   module ClassMethods
     def from_omniauth(auth)
-      find_or_initialize_by(uid: auth.uid, provider: auth.provider).tap do |account|
+      find_or_initialize_by(synced_id: auth.synced_id, provider: auth.provider).tap do |account|
         account.name = auth.info.business_name
         account.update_token(auth.credentials)
         account.save!

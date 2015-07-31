@@ -39,7 +39,7 @@ rails g model Account
 Then, generate a migration to add OAuth fields for the `Account` class:
 
 ```console
-rails g migration AddOAuthFieldsToAccounts provider:string uid:integer:index \
+rails g migration AddOAuthFieldsToAccounts provider:string synced_id:integer:index \
   name:string oauth_access_token:string oauth_refresh_token:string \
   oauth_expires_at:string
 ```
