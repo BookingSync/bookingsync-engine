@@ -1,4 +1,4 @@
-# master
+# 1.0.1
 
 * Cleanup deprecated warnings about routes mounting
 * Update `bookingsync-api` which fix `addressable` dependency
