@@ -1,9 +1,9 @@
-# 1.0.1
+# 1.0.1 (2015-07-31)
 
 * Cleanup deprecated warnings about routes mounting
 * Update `bookingsync-api` which fix `addressable` dependency
 
-# 1.0.0
+# 1.0.0 (2015-07-31)
 
 * BREAKING CHANGE: Rename account `synced_key` from `uid` to `synced_id`
 * Update appraisals gemfiles to match version 0.5.0.
