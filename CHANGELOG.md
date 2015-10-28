@@ -1,3 +1,5 @@
+* Bump omniauth-bookingsync to ~>0.3.0
+
 # 1.0.1 (2015-07-31)
 
 * Cleanup deprecated warnings about routes mounting
