@@ -1,3 +1,7 @@
+# 1.1.0 (2016-08-23)
+
+* Bump omniauth-bookingsync to ~>0.4.0
+
 # 1.0.2 (2015-10-28)
 
 * Bump omniauth-bookingsync to ~>0.3.0
