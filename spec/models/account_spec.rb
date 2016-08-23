@@ -72,7 +72,12 @@ RSpec.describe Account, type: :model do
     end
 
     context "when the stored token is expired" do
-      self.use_transactional_fixtures = false
+      # comparing rails version, the use_transactional_fixtures only works pre 5
+      if Rails::VERSION::STRING.split(".").first.to_i >=5
+        self.use_transactional_tests = false
+      else
+        self.use_transactional_fixtures = false
+      end
 
       let(:expires_at) { 1.day.ago.to_i.to_s }
       let(:new_expires_at) { 2.days.from_now.to_i.to_s }

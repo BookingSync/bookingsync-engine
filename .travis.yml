@@ -1,10 +1,18 @@
-language: ruby
 sudo: false
+language: ruby
+services:
+  - postgresql
+before_script:
+  - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+before_install:
+  - gem install bundler
+  - gem update bundler
 rvm:
-  - "2.0.0"
-  - "2.1"
-  - "2.2"
+  - 2.2.5
+  - 2.3.1
 gemfile:
   - gemfiles/rails_4.1.gemfile
   - gemfiles/rails_4.2.gemfile
+  - gemfiles/rails_5.gemfile
 script: "bundle exec rake spec"
