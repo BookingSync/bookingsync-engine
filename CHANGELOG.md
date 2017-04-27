@@ -1,3 +1,7 @@
+# 2.0.1 (2017-04-27)
+
+* Cleanup update, mostly regarding Gemfiles
+
 # 2.0.0 (2017-04-27)
 
 * Bump omniauth-bookingsync to ~>0.5.0
