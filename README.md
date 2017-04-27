@@ -5,7 +5,7 @@
 
 ## Requirements
 
-This engine requires Rails `>= 4.1.0` and Ruby `>= 2.0.0`.
+This engine requires Rails `>= 4.2.0` and Ruby `>= 2.2.0`.
 
 ## Documentation
 
@@ -13,7 +13,7 @@ This engine requires Rails `>= 4.1.0` and Ruby `>= 2.0.0`.
 
 ## Installation
 
-BookingSync Engine works with Rails 4.0 onwards and Ruby 2.0 onwards. To get started, add it to your Gemfile with:
+BookingSync Engine works with Rails 4.2 onwards and Ruby 2.2 onwards. To get started, add it to your Gemfile with:
 
 ```ruby
 gem 'bookingsync-engine'
