@@ -1,3 +1,5 @@
+# 2.0.0 (2017-04-27)
+
 * Bump omniauth-bookingsync to ~>0.5.0
 * Drop rails 4.1 support
 * Add ruby 2.3.3 in Travis
