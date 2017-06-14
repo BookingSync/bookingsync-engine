@@ -3,13 +3,9 @@ development:
   encoding: unicode
   database: bookingsync_engine_development
   pool: 5
-  username: manda
-  password:
 
 test:
   adapter: postgresql
   encoding: unicode
   database: bookingsync_engine_test
   pool: 5
-  username: manda
-  password:

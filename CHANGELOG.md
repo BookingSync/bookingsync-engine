@@ -1,3 +1,7 @@
+# Master
+
+* Make internal API of APIClient more flexible
+
 # 2.0.1 (2017-04-27)
 
 * Cleanup update, mostly regarding Gemfiles
