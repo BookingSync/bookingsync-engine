@@ -66,7 +66,7 @@ module BookingSync::Engine::AuthHelpers
   #
   # Renders the new authorization path with 401 Unauthorized status by default.
   def request_authorization_for_xhr!
-    render text: new_authorization_url, status: :unauthorized
+    render plain: new_authorization_url, status: :unauthorized
   end
 
   # Request a new authorization for Embedded Apps.
@@ -74,7 +74,7 @@ module BookingSync::Engine::AuthHelpers
   # Load the new authorization path using Javascript by default.
   def request_authorization_for_embedded!
     allow_bookingsync_iframe
-    render text: "<script type='text/javascript'>top.location.href = " +
+    render plain: "<script type='text/javascript'>top.location.href = " +
       "'#{new_authorization_path}';</script>"
   end
 

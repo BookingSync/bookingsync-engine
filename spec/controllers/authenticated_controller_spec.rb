@@ -31,7 +31,7 @@ RSpec.describe AuthenticatedController, type: :controller do
       before { BookingSync::Engine.embedded! }
 
       it "renders the target url in response" do
-        xhr :get, :index
+        get :index, xhr: true
         expect(response.status).to eq(401)
         expect(response.body).to eq("http://test.host/auth/bookingsync/?account_id=")
       end
@@ -41,7 +41,7 @@ RSpec.describe AuthenticatedController, type: :controller do
       before { BookingSync::Engine.standalone! }
 
       it "renders the target url in response" do
-        xhr :get, :index
+        get :index, xhr: true
         expect(response.status).to eq(401)
         expect(response.body).to eq("http://test.host/auth/bookingsync/?account_id=")
       end

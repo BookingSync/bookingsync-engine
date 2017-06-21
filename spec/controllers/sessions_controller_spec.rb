@@ -10,17 +10,17 @@ RSpec.describe SessionsController, type: :controller do
 
     it "loads or creates account from omniauth auth" do
       expect(Account).to receive(:from_omniauth).and_call_original
-      get :create, provider: :bookingsync
+      get :create, params: { provider: :bookingsync }
     end
 
     it "runs the account_authorized callback" do
       expect(controller).to receive(:account_authorized)
-      get :create, provider: :bookingsync
+      get :create, params: { provider: :bookingsync }
     end
 
     it "redirects to after_bookingsync_sign_in_path" do
       expect(controller).to receive(:after_bookingsync_sign_in_path).and_return("/admin")
-      get :create, provider: :bookingsync
+      get :create, params: { provider: :bookingsync }
       expect(response).to redirect_to("/admin")
     end
   end
