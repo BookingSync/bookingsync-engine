@@ -1,5 +1,8 @@
 # Master
 
+* Add support for Rails 5.1
+* Drop support for Rails prior to 5.0
+
 # 2.0.2 (2017-06-14)
 
 * Make internal API of APIClient more flexible

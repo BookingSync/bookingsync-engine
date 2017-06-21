@@ -1,5 +1,5 @@
 class AuthenticatedController < ApplicationController
-  before_filter :authenticate_account!
+  before_action :authenticate_account!
 
   def index
   end
