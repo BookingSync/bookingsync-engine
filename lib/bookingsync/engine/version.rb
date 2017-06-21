@@ -1,3 +1,3 @@
 module BookingSync
-  ENGINE_VERSION = "2.0.2"
+  ENGINE_VERSION = "3.0.0"
 end
