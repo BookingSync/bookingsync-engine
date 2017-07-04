@@ -10,6 +10,7 @@ RSpec.describe AuthenticatedController, type: :controller do
         expect(response.status).to eq(200)
         expect(response.body).to eq(
           "<script type='text/javascript'>top.location.href = '/auth/bookingsync/?account_id=';</script>")
+        expect(response.header["Content-Type"]).to include("text/html")
       end
     end
 

@@ -74,8 +74,8 @@ module BookingSync::Engine::AuthHelpers
   # Load the new authorization path using Javascript by default.
   def request_authorization_for_embedded!
     allow_bookingsync_iframe
-    render plain: "<script type='text/javascript'>top.location.href = " +
-      "'#{new_authorization_path}';</script>"
+    render html: ("<script type='text/javascript'>top.location.href = " +
+      "'#{new_authorization_path}';</script>").html_safe
   end
 
   # Request a new authorization for Standalone Apps.
