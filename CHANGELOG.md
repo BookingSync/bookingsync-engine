@@ -1,5 +1,7 @@
 # Master
 
+# 3.0.1 (2017-07-04)
+
 * Fix content type for request authorization flow
 
 # 3.0.0 (2017-06-21)
