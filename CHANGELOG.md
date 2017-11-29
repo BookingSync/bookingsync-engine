@@ -1,5 +1,7 @@
 # Master
 
+* Don't escape transaction when updating token to use less DB connections and avoid possible leaking.
+
 # 3.0.1 (2017-07-04)
 
 * Fix content type for request authorization flow
