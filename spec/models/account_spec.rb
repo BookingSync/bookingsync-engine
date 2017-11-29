@@ -99,18 +99,6 @@ RSpec.describe Account, type: :model do
         expect(token).to receive(:refresh!)
         account.token
       end
-
-      it "stores the refreshed token even with rollback" do
-        Account.transaction do
-          account.token
-          raise ActiveRecord::Rollback
-        end
-
-        account.reload
-        expect(account.oauth_access_token).to eq("refreshed_token")
-        expect(account.oauth_refresh_token).to eq("refreshed_refresh_token")
-        expect(account.oauth_expires_at).to eq(new_expires_at)
-      end
     end
   end
 
