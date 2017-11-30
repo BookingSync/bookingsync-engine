@@ -1,6 +1,6 @@
 # Master
 
-# 3.0.2
+# 3.0.2 (2017-11-30)
 
 * Don't escape transaction when updating token to use less DB connections and avoid possible leaking.
 * update bookingsync-api to fix `Net::HTTP::Persistent too many connection resets` error
