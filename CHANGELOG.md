@@ -1,5 +1,8 @@
 # Master
 
+* Add support for multi application setup
+* BREAKING CHANGE: Rename BookingSync::Engine::Model in BookingSync::Engine::AccountModel
+
 # 3.0.2 (2017-11-30)
 
 * Don't escape transaction when updating token to use less DB connections and avoid possible leaking.

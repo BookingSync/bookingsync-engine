@@ -10,16 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140522110454) do
+ActiveRecord::Schema.define(version: 20181128220352) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "accounts", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "provider"
-    t.integer  "synced_id"
-    t.string   "name"
-    t.string   "oauth_access_token"
-    t.string   "oauth_refresh_token"
-    t.string   "oauth_expires_at"
-    t.index ["synced_id"], name: "index_accounts_on_synced_id", using: :btree
+    t.string "provider"
+    t.integer "synced_id"
+    t.string "name"
+    t.string "oauth_access_token"
+    t.string "oauth_refresh_token"
+    t.string "oauth_expires_at"
+    t.string "host"
+    t.index ["synced_id"], name: "index_accounts_on_synced_id"
   end
+
+  create_table "applications", force: :cascade do |t|
+    t.string "host"
+    t.text "client_id"
+    t.text "client_secret"
+  end
+
 end

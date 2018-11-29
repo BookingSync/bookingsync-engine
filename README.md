@@ -56,15 +56,42 @@ and migrate:
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::Account` in your `Account` model:
+Also include `BookingSync::Engine::AccountModel` in your `Account` model:
 
 ```ruby
 class Account < ActiveRecord::Base
-  include BookingSync::Engine::Model
+  include BookingSync::Engine::AccountModel
 end
 ```
 
 When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
+
+### Extra steps for multi application setup
+
+```console
+rails g model Application
+```
+
+Then, generate a migration to add credentials fields for the `Application` class:
+
+```console
+rails g migration AddCredentialsFieldsToApplications host:string:uniq:index client_id:text \
+  client_secret:text
+```
+
+and migrate:
+
+```console
+rake db:migrate
+```
+
+Also include `BookingSync::Engine::ApplicationModel` in your `Application` model:
+
+```ruby
+class Application < ActiveRecord::Base
+  include BookingSync::Engine::ApplicationModel
+end
+```
 
 ## Configuration
 
@@ -78,6 +105,8 @@ The engine is configured by the following ENV variables:
 
 You might want to use [dotenv-rails](https://github.com/bkeepers/dotenv)
 to make ENV variables management easy.
+
+**When using a multi application setup, it's best to keep BOOKINGSYNC_APP_ID and BOOKINGSYNC_APP_SECRET blank**
 
 ## Embedded vs Standalone apps
 
