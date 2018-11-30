@@ -7,22 +7,22 @@ module BookingSync
     initializer "bookingsync.add_omniauth" do |app|
       app.middleware.use OmniAuth::Builder do
         provider :bookingsync,
-          BookingSync::Engine.support_multi_applications? ? nil : ENV['BOOKINGSYNC_APP_ID'],
-          BookingSync::Engine.support_multi_applications? ? nil : ENV['BOOKINGSYNC_APP_SECRET'],
-          scope: ENV['BOOKINGSYNC_SCOPE'],
+          BookingSync::Engine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_ID"],
+          BookingSync::Engine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_SECRET"],
+          scope: ENV["BOOKINGSYNC_SCOPE"],
           setup: -> (env) {
-            if url = ENV['BOOKINGSYNC_URL']
-              env['omniauth.strategy'].options[:client_options].site = url
+            if url = ENV["BOOKINGSYNC_URL"]
+              env["omniauth.strategy"].options[:client_options].site = url
             end
-            env['omniauth.strategy'].options[:client_options].ssl = {
-              verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false'
+            env["omniauth.strategy"].options[:client_options].ssl = {
+              verify: ENV["BOOKINGSYNC_VERIFY_SSL"] != "false"
             }
 
             if BookingSync::Engine.support_multi_applications?
               credentials = BookingSync::Engine::CredentialsResolver.new(env["HTTP_HOST"]).call
-              if credentials.present?
-                env['omniauth.strategy'].options[:client_id] = credentials[:client_id]
-                env['omniauth.strategy'].options[:client_secret] = credentials[:client_secret]
+              if credentials.valid?
+                env["omniauth.strategy"].options[:client_id] = credentials.client_id
+                env["omniauth.strategy"].options[:client_secret] = credentials.client_secret
               end
             end
           }
@@ -75,9 +75,9 @@ module BookingSync
     # The ENV variables used for configuration are described in {file:README.md}.
     #
     # @return [OAuth2::Client] configured OAuth client
-    def self.oauth_client(client_id: ENV['BOOKINGSYNC_APP_ID'], client_secret: ENV['BOOKINGSYNC_APP_SECRET'])
+    def self.oauth_client(client_id: ENV["BOOKINGSYNC_APP_ID"], client_secret: ENV["BOOKINGSYNC_APP_SECRET"])
       client_options = {
-        site: ENV['BOOKINGSYNC_URL'] || 'https://www.bookingsync.com',
+        site: ENV["BOOKINGSYNC_URL"] || 'https://www.bookingsync.com',
         connection_opts: { headers: { accept: "application/vnd.api+json" } }
       }
       client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false' }
@@ -89,12 +89,12 @@ module BookingSync
     end
 
     def self.support_multi_applications?
-      ENV['BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS'].to_s.downcase == "true"
+      ENV["BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS"].to_s.downcase == "true"
     end
   end
 end
 
+require "bookingsync/engine/application_credentials"
 require "bookingsync/engine/credentials_resolver"
 require "bookingsync/engine/api_client"
-require "bookingsync/engine/account_model"
-require "bookingsync/engine/application_model"
+require "bookingsync/engine/models"

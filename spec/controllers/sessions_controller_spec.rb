@@ -4,12 +4,14 @@ RSpec.describe SessionsController, type: :controller do
   routes { BookingSync::Engine.routes }
 
   describe "GET create" do
+    let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
+
     before do
-      request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:bookingsync]
+      request.env["omniauth.auth"] = auth
     end
 
     it "loads or creates account from omniauth auth" do
-      expect(Account).to receive(:from_omniauth).and_call_original
+      expect(Account).to receive(:from_omniauth).with(auth, "test.host").and_call_original
       get :create, params: { provider: :bookingsync }
     end
 

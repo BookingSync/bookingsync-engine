@@ -1,3 +1,3 @@
 class Application < ActiveRecord::Base
-  include BookingSync::Engine::ApplicationModel
+  include BookingSync::Engine::Models::ApplicationModel
 end

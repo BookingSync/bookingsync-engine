@@ -1,4 +1,4 @@
-class AddOAuthFieldsToAccounts < ActiveRecord::Migration
+class AddOAuthFieldsToAccounts < ActiveRecord::Migration[5.1]
   def change
     add_column :accounts, :provider, :string
     add_column :accounts, :synced_id, :integer

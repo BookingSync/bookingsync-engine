@@ -10,28 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181128220352) do
+ActiveRecord::Schema.define(version: 20181130063104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "provider"
     t.integer "synced_id"
     t.string "name"
     t.string "oauth_access_token"
     t.string "oauth_refresh_token"
     t.string "oauth_expires_at"
-    t.string "host"
     t.index ["synced_id"], name: "index_accounts_on_synced_id"
   end
 
   create_table "applications", force: :cascade do |t|
-    t.string "host"
-    t.text "client_id"
-    t.text "client_secret"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "host", null: false
+    t.text "client_id", null: false
+    t.text "client_secret", null: false
+    t.index ["client_id"], name: "index_applications_on_client_id", unique: true
+    t.index ["client_secret"], name: "index_applications_on_client_secret", unique: true
+    t.index ["host"], name: "index_applications_on_host", unique: true
+  end
+
+  create_table "multi_applications_accounts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "provider"
+    t.integer "synced_id"
+    t.string "name"
+    t.string "oauth_access_token"
+    t.string "oauth_refresh_token"
+    t.string "oauth_expires_at"
+    t.string "host", null: false
+    t.index ["host"], name: "index_multi_applications_accounts_on_host", unique: true
+    t.index ["synced_id"], name: "index_multi_applications_accounts_on_synced_id"
   end
 
 end

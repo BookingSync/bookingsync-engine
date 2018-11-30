@@ -36,11 +36,14 @@ This will add the following routes:
 * `/auth/failure`
 * `/signout`
 
+
 BookingSync Engine uses the `Account` model to authenticate each BookingSync Account, if you do not have an `Account` model yet, create one:
 
 ```console
 rails g model Account
 ```
+
+### For single application setup
 
 Then, generate a migration to add OAuth fields for the `Account` class:
 
@@ -56,17 +59,45 @@ and migrate:
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::AccountModel` in your `Account` model:
+Also include `BookingSync::Engine::Models::SingleApplicationAccountModel` in your `Account` model:
 
 ```ruby
 class Account < ActiveRecord::Base
-  include BookingSync::Engine::AccountModel
+  include BookingSync::Engine::Models::SingleApplicationAccountModel
 end
 ```
 
 When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
 
-### Extra steps for multi application setup
+
+### For multi application setup
+
+Then, generate a migration to add OAuth fields for the `Account` class:
+
+```console
+rails g migration AddOAuthFieldsToAccounts provider:string synced_id:integer:index \
+  name:string oauth_access_token:string oauth_refresh_token:string \
+  oauth_expires_at:string  host:string:uniq:index
+```
+
+Add manually `null: false` to the `host` field on the newly created migration file, then migrate:
+
+```console
+rake db:migrate
+```
+
+Also include `BookingSync::Engine::Models::MultiApplicationsAccountModel` in your `Account` model:
+
+```ruby
+class Account < ActiveRecord::Base
+  include BookingSync::Engine::Models::MultiApplicationsAccountModel
+end
+```
+
+When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
+
+
+You also need to create applications
 
 ```console
 rails g model Application
@@ -75,21 +106,21 @@ rails g model Application
 Then, generate a migration to add credentials fields for the `Application` class:
 
 ```console
-rails g migration AddCredentialsFieldsToApplications host:string:uniq:index client_id:text \
-  client_secret:text
+rails g migration AddCredentialsFieldsToApplications host:string:uniq:index client_id:text:uniq:index \
+  client_secret:text:uniq:index
 ```
 
-and migrate:
+Add `null: false` to this 3 attributes, then migrate:
 
 ```console
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::ApplicationModel` in your `Application` model:
+Also include `BookingSync::Engine::Models::ApplicationModel` in your `Application` model:
 
 ```ruby
 class Application < ActiveRecord::Base
-  include BookingSync::Engine::ApplicationModel
+  include BookingSync::Engine::Models::ApplicationModel
 end
 ```
 

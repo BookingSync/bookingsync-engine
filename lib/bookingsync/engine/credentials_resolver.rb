@@ -1,18 +1,18 @@
 class BookingSync::Engine::CredentialsResolver
-  attr_accessor :host
+  attr_reader :host
+  private :host
 
   def initialize(host)
     @host = host
   end
 
   def call
-    if application = ::Application.find_by_host(host)
-      {
-        client_id: application.client_id,
-        client_secret: application.client_secret
-      }
-    else
-      nil
-    end
+    BookingSync::Engine::ApplicationCredentials.new(application)
+  end
+
+  private
+
+  def application
+    @application ||= ::Application.find_by_host(host)
   end
 end
