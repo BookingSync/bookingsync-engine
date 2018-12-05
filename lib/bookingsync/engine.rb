@@ -1,6 +1,6 @@
-require 'omniauth'
-require 'omniauth-bookingsync'
-require 'bookingsync-api'
+require "omniauth"
+require "omniauth-bookingsync"
+require "bookingsync-api"
 
 module BookingSync
   class Engine < ::Rails::Engine
