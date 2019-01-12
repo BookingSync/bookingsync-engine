@@ -5,7 +5,7 @@
 
 ## Requirements
 
-This engine requires Rails `>= 5.0.0` and Ruby `>= 2.2.0`.
+This engine requires Rails `>= 5.0.0` and Ruby `>= 2.3.0`.
 
 ## Documentation
 
