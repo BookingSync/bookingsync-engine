@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130063104) do
+ActiveRecord::Schema.define(version: 2018_11_30_063104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +48,8 @@ ActiveRecord::Schema.define(version: 20181130063104) do
     t.string "oauth_refresh_token"
     t.string "oauth_expires_at"
     t.string "host", null: false
-    t.index ["host"], name: "index_multi_applications_accounts_on_host", unique: true
+    t.index ["host", "synced_id"], name: "index_multi_applications_accounts_on_host_and_synced_id", unique: true
+    t.index ["host"], name: "index_multi_applications_accounts_on_host"
     t.index ["synced_id"], name: "index_multi_applications_accounts_on_synced_id"
   end
 

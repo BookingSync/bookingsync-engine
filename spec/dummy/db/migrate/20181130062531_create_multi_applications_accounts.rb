@@ -1,4 +1,4 @@
-class CreateMultiApplicationsAccounts < ActiveRecord::Migration[5.1]
+class CreateMultiApplicationsAccounts < ActiveRecord::Migration[5.2]
   def change
     create_table :multi_applications_accounts do |t|
 

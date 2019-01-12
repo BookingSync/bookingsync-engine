@@ -22,3 +22,7 @@ RSpec.configure do |config|
   config.order = "random"
   config.raise_errors_for_deprecations!
 end
+
+def rails_version
+  Rails::VERSION::STRING.split(".").first.to_i
+end

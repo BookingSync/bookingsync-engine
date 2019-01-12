@@ -5,7 +5,7 @@ module BookingSync
   end
 end
 
-require "bookingsync/engine/models/base_account_model"
-require "bookingsync/engine/models/single_application_account_model"
-require "bookingsync/engine/models/multi_applications_account_model"
-require "bookingsync/engine/models/application_model"
+require "bookingsync/engine/models/base_account"
+require "bookingsync/engine/models/account"
+require "bookingsync/engine/models/multi_applications_account"
+require "bookingsync/engine/models/application"

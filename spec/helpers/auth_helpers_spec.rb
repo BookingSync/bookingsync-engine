@@ -35,7 +35,7 @@ RSpec.describe ApplicationHelper, type: :helper do
         let!(:account_2) { MultiApplicationsAccount.create!(host: "test.host", synced_id: 123) }
   
         it "finds and return the current account by host and synced_id" do
-          expect(Account).to receive(:find_by).with(host: "test.host", synced_id: 123)
+          expect(Account).to receive(:find_by_host_and_synced_id).with("test.host", 123)
             .and_return(account_2)
           expect(helper.current_account).to eq account_2
         end

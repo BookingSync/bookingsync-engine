@@ -1,4 +1,4 @@
-module BookingSync::Engine::Models::ApplicationModel
+module BookingSync::Engine::Models::Application
   extend ActiveSupport::Concern
 
   included do

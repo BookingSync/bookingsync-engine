@@ -1,4 +1,4 @@
-class CreateApplications < ActiveRecord::Migration[5.1]
+class CreateApplications < ActiveRecord::Migration[5.2]
   def change
     create_table :applications do |t|
 

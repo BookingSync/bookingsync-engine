@@ -1,6 +1,6 @@
-module BookingSync::Engine::Models::MultiApplicationsAccountModel
+module BookingSync::Engine::Models::MultiApplicationsAccount
   extend ActiveSupport::Concern
-  include BookingSync::Engine::Models::BaseAccountModel
+  include BookingSync::Engine::Models::BaseAccount
 
   included do
     validates :synced_id, uniqueness: { scope: :host }
@@ -20,6 +20,10 @@ module BookingSync::Engine::Models::MultiApplicationsAccountModel
         account.update_token(auth.credentials)
         account.save!
       end
+    end
+
+    def find_by_host_and_synced_id(host, synced_id)
+      find_by(host: host, synced_id: synced_id)
     end
   end
 

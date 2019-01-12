@@ -1,13 +1,13 @@
-module BookingSync::Engine::Models::SingleApplicationAccountModel
+module BookingSync::Engine::Models::Account
   extend ActiveSupport::Concern
-  include BookingSync::Engine::Models::BaseAccountModel
+  include BookingSync::Engine::Models::BaseAccount
 
   included do
     validates :synced_id, uniqueness: true
   end
 
   module ClassMethods
-    def from_omniauth(auth, host)
+    def from_omniauth(auth, _host)
       account = find_or_initialize_by(synced_id: auth.uid, provider: auth.provider)
 
       account.tap do |account|

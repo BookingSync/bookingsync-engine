@@ -59,15 +59,15 @@ and migrate:
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::Models::SingleApplicationAccountModel` in your `Account` model:
+Also include `BookingSync::Engine::Models::Account` in your `Account` model:
 
 ```ruby
 class Account < ActiveRecord::Base
-  include BookingSync::Engine::Models::SingleApplicationAccountModel
+  include BookingSync::Engine::Models::Account
 end
 ```
 
-When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
+When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction).
 
 
 ### For multi application setup
@@ -86,11 +86,11 @@ Add manually `null: false` to the `host` field on the newly created migration fi
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::Models::MultiApplicationsAccountModel` in your `Account` model:
+Also include `BookingSync::Engine::Models::MultiApplicationsAccount` in your `Account` model:
 
 ```ruby
 class Account < ActiveRecord::Base
-  include BookingSync::Engine::Models::MultiApplicationsAccountModel
+  include BookingSync::Engine::Models::MultiApplicationsAccount
 end
 ```
 
@@ -116,11 +116,11 @@ Add `null: false` to this 3 attributes, then migrate:
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::Models::ApplicationModel` in your `Application` model:
+Also include `BookingSync::Engine::Models::Application` in your `Application` model:
 
 ```ruby
 class Application < ActiveRecord::Base
-  include BookingSync::Engine::Models::ApplicationModel
+  include BookingSync::Engine::Models::Application
 end
 ```
 
@@ -136,8 +136,6 @@ The engine is configured by the following ENV variables:
 
 You might want to use [dotenv-rails](https://github.com/bkeepers/dotenv)
 to make ENV variables management easy.
-
-**When using a multi application setup, it's best to keep BOOKINGSYNC_APP_ID and BOOKINGSYNC_APP_SECRET blank**
 
 ## Embedded vs Standalone apps
 

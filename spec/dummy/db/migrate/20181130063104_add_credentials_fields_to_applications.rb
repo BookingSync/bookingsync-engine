@@ -1,4 +1,4 @@
-class AddCredentialsFieldsToApplications < ActiveRecord::Migration[5.1]
+class AddCredentialsFieldsToApplications < ActiveRecord::Migration[5.2]
   def change
     add_column :applications, :host, :string, null: false
     add_index :applications, :host, unique: true

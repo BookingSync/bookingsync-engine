@@ -13,9 +13,9 @@ module BookingSync::Engine::AuthHelpers
   def current_account
     if session[:account_id].present?
       if BookingSync::Engine.support_multi_applications?
-        @current_account ||= ::Account.find_by(host: request.host, synced_id: session[:account_id])
+        @current_account ||= ::Account.find_by_host_and_synced_id(request.host, session[:account_id])
       else
-        @current_account ||= ::Account.find_by(synced_id: session[:account_id])
+        @current_account ||= ::Account.find_by_synced_id(session[:account_id])
       end
     end
   end
