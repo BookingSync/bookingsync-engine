@@ -1,5 +1,7 @@
 # Master
 
+* Relax omniauth-bookingsync requirements to >= 0.5.0
+
 # 3.0.2 (2017-11-30)
 
 * Don't escape transaction when updating token to use less DB connections and avoid possible leaking.
