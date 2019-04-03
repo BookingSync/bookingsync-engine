@@ -1,0 +1,11 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  url: postgres://docker:docker@127.0.0.1:14326/development
+  pool: 5
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  url: postgres://docker:docker@127.0.0.1:14326/test
+  pool: 5

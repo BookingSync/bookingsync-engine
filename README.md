@@ -124,6 +124,8 @@ class Application < ActiveRecord::Base
 end
 ```
 
+Set `BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS` to `true`.
+
 ## Configuration
 
 The engine is configured by the following ENV variables:
@@ -133,9 +135,10 @@ The engine is configured by the following ENV variables:
 * `BOOKINGSYNC_APP_SECRET` - BookingSync Application's Client Secret
 * `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test). Default to false
 * `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
+* `BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS` - Activate the multi-applications account signin. Default to false.
 
 You might want to use [dotenv-rails](https://github.com/bkeepers/dotenv)
-to make ENV variables management easy.
+to make ENV variables management easy. See `spec/dummy/.env.sample`.
 
 ## Embedded vs Standalone apps
 
@@ -226,3 +229,11 @@ We would love to see you contributing. Please, just follow the guidelines from [
 ### Testing
 
 By default, your tests will run against the Rails version used in the main Gemfile.lock, to test against all supported Rails version, please run the tests with Appraisals with: `appraisal rake spec`
+
+#### Testing with docker
+
+You can choose to run PostgreSQL in a Docker container. At the moment, you should use [Beta channel](https://docs.docker.com/docker-for-mac/) on a Mac - so you can reach the docker machine on localhost. It is possible to set it up with stable, but then you have to configure it another way.
+
+Use `spec/dummy/config/database.yml.docker` instead of `spec/dummy/config/database.yml`.
+
+Once intalled, setup the DB with `docker-compose create`, `docker-compose start` and `rake db:setup`

@@ -43,11 +43,9 @@ module BookingSync::Engine::Models::BaseAccount
   private
 
   def refresh_token!(current_token = token)
-    @token = current_token.refresh!.tap { |new_token| update_token!(new_token) }
-  end
-
-  def update_token!(token)
-    update_token(token)
-    save!
+    @token = current_token.refresh!.tap do |new_token|
+      update_token(new_token)
+      save!
+    end
   end
 end
