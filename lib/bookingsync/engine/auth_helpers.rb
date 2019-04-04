@@ -13,11 +13,8 @@ module BookingSync::Engine::AuthHelpers
   def current_account
     return if session[:account_id].nil?
 
-    @current_account ||= if BookingSync::Engine.support_multi_applications?
-      ::Account.find_by_host_and_synced_id(request.host, session[:account_id])
-    else
-      ::Account.find_by_synced_id(session[:account_id])
-    end
+    @current_account ||=
+      BookingSyncEngine.setup_model.find_by_host_and_synced_id(request.host, session[:account_id])
   end
 
   # Callback after account is authorized.

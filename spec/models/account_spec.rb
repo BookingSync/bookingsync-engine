@@ -21,10 +21,10 @@ RSpec.describe Account, type: :model do
     let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
 
     before { Account.create!(provider: "bookingsync", synced_id: 456) }
-  
+
     context "when account exists" do
       let!(:account) { Account.create!(provider: "bookingsync", synced_id: 123) }
-  
+
       context "with host given" do
         it "loads the existing account" do
           expect(Account.from_omniauth(auth, "example.test")).to eql(account)
@@ -36,34 +36,44 @@ RSpec.describe Account, type: :model do
           expect(Account.from_omniauth(auth, nil)).to eql(account)
         end
       end
-  
+
       describe "the updated account" do
         before do
           Account.from_omniauth(auth, "example.test")
           account.reload
         end
-  
+
         it_behaves_like "it takes attributes from auth"
       end
     end
-  
+
     context "when account doesn't exist" do
       it "creates new account" do
         expect {
           Account.from_omniauth(auth, "example.test")
         }.to change { Account.count }.by(1)
       end
-  
+
       describe "the newly created account" do
         let!(:account) { Account.from_omniauth(auth, "example.test") }
-  
+
         it "sets synced_id and provider from auth" do
           expect(account.synced_id).to eq 123
           expect(account.provider).to eq "bookingsync"
         end
-  
+
         it_behaves_like "it takes attributes from auth"
       end
+    end
+  end
+
+  describe ".find_by_host_and_synced_id" do
+    let!(:account_1) { Account.create!(synced_id: 1) }
+    let!(:account_2) { Account.create!(synced_id: 2) }
+    let!(:account_3) { Account.create!(synced_id: 3) }
+
+    it "returns the right account" do
+      expect(Account.find_by_host_and_synced_id("any_host", 3)).to eq account_3
     end
   end
 
@@ -83,7 +93,7 @@ RSpec.describe Account, type: :model do
         expect(account.token.token).to eq "token"
       end
     end
-  
+
     context "when the stored token is expired" do
       # comparing rails version, the use_transactional_fixtures only works pre 5
       if Rails::VERSION::STRING.split(".").first.to_i >=5
@@ -91,23 +101,23 @@ RSpec.describe Account, type: :model do
       else
         self.use_transactional_fixtures = false
       end
-  
+
       let(:expires_at) { 1.day.ago.to_i.to_s }
       let(:new_expires_at) { 2.days.from_now.to_i.to_s }
       let(:token) do
         double(expired?: true, refresh!: double(token: "refreshed_token",
           refresh_token: "refreshed_refresh_token", expires_at: new_expires_at))
       end
-  
+
       before do
         expect(OAuth2::AccessToken).to receive(:new).with(oauth_client, "token",
           refresh_token: "refresh_token", expires_at: expires_at) { token }
       end
-  
+
       after do
         Account.destroy_all
       end
-  
+
       it "refreshes the token" do
         expect(token).to receive(:refresh!)
         account.token
@@ -161,7 +171,6 @@ RSpec.describe Account, type: :model do
     it "returns API client initialized with OAuth token" do
       token = double(token: "access_token", expired?: false)
       allow(OAuth2::AccessToken).to receive(:new).and_return(token)
-      
 
       expect(account.api).to be_kind_of(BookingSync::API::Client)
       expect(account.api.token).to eq("access_token")

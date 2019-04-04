@@ -126,6 +126,34 @@ end
 
 Set `BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS` to `true`.
 
+#### Use different models for single app and multiple app setup
+
+To make transition between the two modes on the fly, you can use different model name for your
+accounts.
+
+For the following example:
+
+```ruby
+class MySingleAppAccount < ActiveRecord::Base
+  include BookingSync::Engine::Models::Account
+end
+
+class MyMultiAppAccount < ActiveRecord::Base
+  include BookingSync::Engine::Models::MultiApplicationsAccount
+end
+```
+
+You just need to define which model goes with which mode in an initializer.
+
+
+```ruby
+BookingSyncEngine.setup do |setup|
+  setup.single_app_model = -> { ::MySingleAppAccount }
+  setup.multi_app_model = -> { ::MyMultiAppAccount }
+end
+```
+
+
 ## Configuration
 
 The engine is configured by the following ENV variables:

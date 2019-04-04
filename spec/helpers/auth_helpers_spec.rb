@@ -15,28 +15,25 @@ RSpec.describe ApplicationHelper, type: :helper do
 
       context "when using single application setup" do
         before do
-          allow(BookingSync::Engine).to receive(:support_multi_applications?).and_return(false)
+          allow(BookingSyncEngine).to receive(:support_multi_applications?).and_return(false)
         end
-  
+
         let!(:account) { Account.create!(synced_id: 123) }
 
         it "finds and return the current account by synced_id" do
-          expect(Account).to receive(:find_by).with(synced_id: 123).and_call_original
           expect(helper.current_account).to eq account
         end
       end
 
       context "when using multi application setup" do
         before do
-          allow(BookingSync::Engine).to receive(:support_multi_applications?).and_return(true)
+          allow(BookingSyncEngine).to receive(:support_multi_applications?).and_return(true)
         end
 
         let!(:account_1) { MultiApplicationsAccount.create!(host: "example.host", synced_id: 123) }
         let!(:account_2) { MultiApplicationsAccount.create!(host: "test.host", synced_id: 123) }
-  
+
         it "finds and return the current account by host and synced_id" do
-          expect(Account).to receive(:find_by_host_and_synced_id).with("test.host", 123)
-            .and_return(account_2)
           expect(helper.current_account).to eq account_2
         end
       end

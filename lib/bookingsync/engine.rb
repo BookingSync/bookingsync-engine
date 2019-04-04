@@ -7,8 +7,8 @@ module BookingSync
     initializer "bookingsync.add_omniauth" do |app|
       app.middleware.use OmniAuth::Builder do
         provider :bookingsync,
-          BookingSync::Engine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_ID"],
-          BookingSync::Engine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_SECRET"],
+          BookingSyncEngine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_ID"],
+          BookingSyncEngine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_SECRET"],
           scope: ENV["BOOKINGSYNC_SCOPE"],
           setup: -> (env) {
             if url = ENV["BOOKINGSYNC_URL"]
@@ -18,7 +18,7 @@ module BookingSync
               verify: ENV["BOOKINGSYNC_VERIFY_SSL"] != "false"
             }
 
-            if BookingSync::Engine.support_multi_applications?
+            if BookingSyncEngine.support_multi_applications?
               credentials = BookingSync::Engine::CredentialsResolver.new(env["HTTP_HOST"]).call
               if credentials.valid?
                 env["omniauth.strategy"].options[:client_id] = credentials.client_id
@@ -86,10 +86,6 @@ module BookingSync
 
     def self.application_token(client_id: nil, client_secret: nil)
       oauth_client(client_id: client_id, client_secret: client_secret).client_credentials.get_token
-    end
-
-    def self.support_multi_applications?
-      ENV["BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS"].to_s.downcase == "true"
     end
   end
 end

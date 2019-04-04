@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe AuthenticatedController, type: :controller do
   describe "GET index" do

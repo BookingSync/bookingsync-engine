@@ -16,6 +16,10 @@ module BookingSync::Engine::Models::Account
         account.save!
       end
     end
+
+    def find_by_host_and_synced_id(_host, synced_id)
+      find_by(synced_id: synced_id)
+    end
   end
 
   def application_token
