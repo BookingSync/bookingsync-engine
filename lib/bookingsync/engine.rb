@@ -84,7 +84,7 @@ module BookingSync
       OAuth2::Client.new(client_id, client_secret, client_options)
     end
 
-    def self.application_token(client_id: nil, client_secret: nil)
+    def self.application_token(client_id: ENV["BOOKINGSYNC_APP_ID"], client_secret: ENV["BOOKINGSYNC_APP_SECRET"])
       oauth_client(client_id: client_id, client_secret: client_secret).client_credentials.get_token
     end
   end
