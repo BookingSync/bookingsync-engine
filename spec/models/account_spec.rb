@@ -78,16 +78,12 @@ RSpec.describe Account, type: :model do
   end
 
   describe "#token" do
-    let(:expires_at) { 1.day.from_now.to_i }
     let!(:account) { Account.create!(synced_id: 123, oauth_access_token: "token",
       oauth_refresh_token: "refresh_token", oauth_expires_at: expires_at) }
-    let(:oauth_client) { double }
-
-    before do
-      allow(account).to receive(:oauth_client).with(no_args).and_return(oauth_client)
-    end
 
     context "when the stored token is fresh" do
+      let(:expires_at) { 1.day.from_now.to_i }
+
       it "returns the token" do
         expect(account.token).to be_a OAuth2::AccessToken
         expect(account.token.token).to eq "token"
@@ -95,51 +91,71 @@ RSpec.describe Account, type: :model do
     end
 
     context "when the stored token is expired" do
-      # comparing rails version, the use_transactional_fixtures only works pre 5
-      if Rails::VERSION::STRING.split(".").first.to_i >=5
-        self.use_transactional_tests = false
-      else
-        self.use_transactional_fixtures = false
+      around do |test_case|
+        # comparing rails version, the use_transactional_fixtures only works pre 5
+        if Rails::VERSION::MAJOR >= 5
+          orinal_setup = self.use_transactional_tests
+          self.use_transactional_tests = false
+          test_case.run
+          self.use_transactional_tests = orinal_setup
+        else
+          orinal_setup = self.use_transactional_fixtures
+          self.use_transactional_fixtures = false
+          test_case.run
+          self.use_transactional_fixtures = orinal_setup
+        end
       end
 
       let(:expires_at) { 1.day.ago.to_i.to_s }
-      let(:new_expires_at) { 2.days.from_now.to_i.to_s }
-      let(:token) do
-        double(expired?: true, refresh!: double(token: "refreshed_token",
-          refresh_token: "refreshed_refresh_token", expires_at: new_expires_at))
-      end
 
       before do
-        expect(OAuth2::AccessToken).to receive(:new).with(oauth_client, "token",
-          refresh_token: "refresh_token", expires_at: expires_at) { token }
-      end
-
-      after do
-        Account.destroy_all
+        stub_request(:post, "https://some_url.com/oauth/token").with(
+          body: {
+            "client_id" => "some_client_id",
+            "client_secret" => "some_client_secret",
+            "grant_type" => "refresh_token",
+            "refresh_token" => "refresh_token"
+          },
+          headers: {
+            "Accept" => "application/vnd.api+json",
+            "Content-Type" => "application/x-www-form-urlencoded"
+          }
+        ).to_return(
+          status: 200,
+          body: { "access_token": "refreshed_token" }.to_json,
+          headers: { "Content-Type" => "application/json" }
+        )
       end
 
       it "refreshes the token" do
-        expect(token).to receive(:refresh!)
-        account.token
+        expect(account.token).to be_a OAuth2::AccessToken
+        expect(account.token.token).to eq "refreshed_token"
       end
     end
   end
 
   describe "#application_token" do
-    let(:client_credentials) { double }
-    let(:oauth2_client) { double }
     let!(:account) { Account.create!(synced_id: 123) }
+    before do
+      stub_request(:post, "https://some_url.com/oauth/token").with(
+        body: {
+          "client_id" => "some_client_id",
+          "client_secret" => "some_client_secret",
+          "grant_type"=>"client_credentials"
+        },
+        headers: {
+          "Accept" => "application/vnd.api+json",
+          "Content-Type" => "application/x-www-form-urlencoded"
+        }
+      ).to_return(
+        status: 200,
+        body: { "access_token": "the_access_token" }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+    end
 
     it "returns a client credential token setup without default params" do
-      expect(client_credentials).to receive(:get_token).and_return("client_credentials_token")
-      expect(oauth2_client).to receive(:client_credentials).and_return(client_credentials)
-      expect(OAuth2::Client).to receive(:new)
-        .with(ENV['BOOKINGSYNC_APP_ID'], ENV['BOOKINGSYNC_APP_SECRET'], any_args)
-        .and_return(oauth2_client)
-
-      expect(BookingSync::Engine).to receive(:application_token)
-        .with(no_args).at_least(1).and_call_original
-      expect(account.application_token).to eq "client_credentials_token"
+      expect(account.application_token.token).to eq "the_access_token"
     end
   end
 
@@ -147,8 +163,9 @@ RSpec.describe Account, type: :model do
     let!(:account) { Account.create!(synced_id: 123) }
 
     it "returns a BookingSync::Engine.oauth_client setup without default params" do
-      expect(BookingSync::Engine).to receive(:oauth_client).with(no_args).and_call_original
       expect(account.oauth_client).to be_an OAuth2::Client
+      expect(account.oauth_client.id).to eq "some_client_id"
+      expect(account.oauth_client.secret).to eq "some_client_secret"
     end
   end
 
@@ -161,17 +178,9 @@ RSpec.describe Account, type: :model do
   end
 
   describe "#api" do
-    let!(:account) { Account.new }
-    let(:oauth_client) { double }
-
-    before do
-      allow(account).to receive(:oauth_client).with(no_args).and_return(oauth_client)
-    end
+    let!(:account) { Account.new(oauth_access_token: "access_token") }
 
     it "returns API client initialized with OAuth token" do
-      token = double(token: "access_token", expired?: false)
-      allow(OAuth2::AccessToken).to receive(:new).and_return(token)
-
       expect(account.api).to be_kind_of(BookingSync::API::Client)
       expect(account.api.token).to eq("access_token")
     end
@@ -182,12 +191,10 @@ RSpec.describe Account, type: :model do
       account = Account.create!(oauth_access_token: "token",
         oauth_refresh_token: "refresh", oauth_expires_at: "expires")
 
-      account.clear_token!
-      account.reload
-
-      expect(account.oauth_access_token).to be_nil
-      expect(account.oauth_refresh_token).to be_nil
-      expect(account.oauth_expires_at).to be_nil
+      expect { account.clear_token! }
+        .to change { account.reload.oauth_access_token }.from("token").to(nil)
+        .and change { account.oauth_refresh_token }.from("refresh").to(nil)
+        .and change { account.oauth_expires_at }.from("expires").to(nil)
     end
   end
 
@@ -197,11 +204,10 @@ RSpec.describe Account, type: :model do
       account = MultiApplicationsAccount.create!(oauth_access_token: "token",
         oauth_refresh_token: "refresh", oauth_expires_at: "expires", host: "example.test")
 
-      account.update_token(token)
-
-      expect(account.oauth_access_token).to eq "new_access_token"
-      expect(account.oauth_refresh_token).to eq "new_refresh_token"
-      expect(account.oauth_expires_at).to eq "new_expires_at"
+      expect { account.update_token(token) }
+        .to change { account.oauth_access_token }.from("token").to("new_access_token")
+        .and change { account.oauth_refresh_token }.from("refresh").to("new_refresh_token")
+        .and change { account.oauth_expires_at }.from("expires").to("new_expires_at")
     end
   end
 end

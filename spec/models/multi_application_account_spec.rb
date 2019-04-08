@@ -42,108 +42,138 @@ RSpec.describe MultiApplicationsAccount, type: :model do
         it "loads the existing account" do
           expect(MultiApplicationsAccount.from_omniauth(auth, "example.test")).to eql(account)
         end
-    
+
         describe "the updated account" do
           before do
             MultiApplicationsAccount.from_omniauth(auth, "example.test")
             account.reload
           end
-    
+
           it_behaves_like "it takes attributes from auth"
         end
       end
-    
+
       context "when account doesn't exist" do
         it "creates new account" do
           expect {
             MultiApplicationsAccount.from_omniauth(auth, "example3.test")
           }.to change { MultiApplicationsAccount.count }.by(1)
         end
-    
+
         describe "the newly created account" do
           let!(:account) { MultiApplicationsAccount.from_omniauth(auth, "example3.test") }
-    
+
           it "sets synced_id and provider from auth as well as host" do
             expect(account.synced_id).to eq 123
             expect(account.provider).to eq "bookingsync"
             expect(account.host).to eq "example3.test"
           end
-    
+
           it_behaves_like "it takes attributes from auth"
         end
       end
     end
   end
 
-  describe "#token" do
-    let(:expires_at) { 1.day.from_now.to_i }
-    let!(:account) do
-      MultiApplicationsAccount.create!(synced_id: 123, oauth_access_token: "token",
-        oauth_refresh_token: "refresh_token", oauth_expires_at: expires_at, host: "example.test")
-    end
-    let(:oauth_client) { double }
+  describe ".find_by_host_and_synced_id" do
+    let!(:account_1) { MultiApplicationsAccount.create!(synced_id: 1, host: "example.test") }
+    let!(:account_2) { MultiApplicationsAccount.create!(synced_id: 2, host: "example.test") }
+    let!(:account_3) { MultiApplicationsAccount.create!(synced_id: 1, host: "example2.test") }
+    let!(:account_4) { MultiApplicationsAccount.create!(synced_id: 2, host: "example2.test") }
 
-    before do
-      allow(account).to receive(:oauth_client).with(no_args).and_return(oauth_client)
+    it "returns the right account" do
+      expect(MultiApplicationsAccount.find_by_host_and_synced_id("example2.test", 1)).to eq account_3
     end
+  end
+
+  describe "#token" do
+
+    let!(:account) do
+      MultiApplicationsAccount.create!(
+        synced_id: 123, host: "example.test",
+        oauth_access_token: "token", oauth_refresh_token: "refresh_token",
+        oauth_expires_at: expires_at
+      )
+    end
+    let!(:application) { Application.create!(host: "example.test", client_id: "123", client_secret: "456") }
 
     context "when the stored token is fresh" do
+      let(:expires_at) { 1.day.from_now.to_i }
+
       it "returns the token" do
         expect(account.token).to be_a OAuth2::AccessToken
         expect(account.token.token).to eq "token"
       end
     end
-  
+
     context "when the stored token is expired" do
-      # comparing rails version, the use_transactional_fixtures only works pre 5
-      if rails_version >=5
-        self.use_transactional_tests = false
-      else
-        self.use_transactional_fixtures = false
+      around do |test_case|
+        # comparing rails version, the use_transactional_fixtures only works pre 5
+        if Rails::VERSION::MAJOR >= 5
+          orinal_setup = self.use_transactional_tests
+          self.use_transactional_tests = false
+          test_case.run
+          self.use_transactional_tests = orinal_setup
+        else
+          orinal_setup = self.use_transactional_fixtures
+          self.use_transactional_fixtures = false
+          test_case.run
+          self.use_transactional_fixtures = orinal_setup
+        end
       end
-  
+
       let(:expires_at) { 1.day.ago.to_i.to_s }
-      let(:new_expires_at) { 2.days.from_now.to_i.to_s }
-      let(:token) do
-        double(expired?: true, refresh!: double(token: "refreshed_token",
-          refresh_token: "refreshed_refresh_token", expires_at: new_expires_at))
-      end
-  
+
       before do
-        expect(OAuth2::AccessToken).to receive(:new).with(oauth_client, "token",
-          refresh_token: "refresh_token", expires_at: expires_at) { token }
+        stub_request(:post, "https://some_url.com/oauth/token").with(
+          body: {
+            "client_id" => "123",
+            "client_secret" => "456",
+            "grant_type" => "refresh_token",
+            "refresh_token" => "refresh_token"
+          },
+          headers: {
+            "Accept" => "application/vnd.api+json",
+            "Content-Type" => "application/x-www-form-urlencoded"
+          }
+        ).to_return(
+          status: 200,
+          body: { "access_token": "refreshed_token" }.to_json,
+          headers: { "Content-Type" => "application/json" }
+        )
       end
-  
-      after do
-        MultiApplicationsAccount.destroy_all
-      end
-  
+
       it "refreshes the token" do
-        expect(token).to receive(:refresh!)
-        account.token
+        expect(account.token).to be_a OAuth2::AccessToken
+        expect(account.token.token).to eq "refreshed_token"
       end
     end
   end
 
   describe "#application_token" do
-    let(:client_credentials) { double }
-    let(:oauth2_client) { double }
-
     let!(:account) { MultiApplicationsAccount.create!(synced_id: 123, host: "test.example") }
     let!(:application) { Application.create!(host: "test.example", client_id: "123", client_secret: "456") }
 
-    it "returns a client credential token setup with application's credentials" do
-      expect(client_credentials).to receive(:get_token).and_return("client_credentials_token")
-      expect(oauth2_client).to receive(:client_credentials).and_return(client_credentials)
-      expect(OAuth2::Client).to receive(:new)
-        .with(application.client_id, application.client_secret, any_args)
-        .and_return(oauth2_client)
+    before do
+      stub_request(:post, "https://some_url.com/oauth/token").with(
+        body: {
+          "client_id" => "123",
+          "client_secret" => "456",
+          "grant_type"=>"client_credentials"
+        },
+        headers: {
+          "Accept" => "application/vnd.api+json",
+          "Content-Type" => "application/x-www-form-urlencoded"
+        }
+      ).to_return(
+        status: 200,
+        body: { "access_token": "the_access_token" }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+    end
 
-      expect(BookingSync::Engine).to receive(:application_token)
-        .with(client_id: application.client_id, client_secret: application.client_secret)
-        .at_least(1)
-        .and_call_original
-      expect(account.application_token).to eq "client_credentials_token"
+    it "returns a client credential token setup with application's credentials" do
+      expect(account.application_token.token).to eq "the_access_token"
     end
   end
 
@@ -152,10 +182,6 @@ RSpec.describe MultiApplicationsAccount, type: :model do
     let!(:application) { Application.create!(host: "test.example", client_id: "123", client_secret: "456") }
 
     it "returns a BookingSync::Engine.oauth_client setup with application's credentials" do
-      expect(BookingSync::Engine).to receive(:oauth_client)
-        .with(client_id: application.client_id, client_secret: application.client_secret)
-        .at_least(1)
-        .and_call_original
       expect(account.oauth_client).to be_an OAuth2::Client
       expect(account.oauth_client.id).to eq application.client_id
       expect(account.oauth_client.secret).to eq application.client_secret
@@ -173,18 +199,14 @@ RSpec.describe MultiApplicationsAccount, type: :model do
   end
 
   describe "#api" do
-    let!(:account) { MultiApplicationsAccount.new }
-    let(:oauth_client) { double }
-
-    before do
-      allow(account).to receive(:oauth_client).with(no_args).and_return(oauth_client)
+    let!(:application) do
+      Application.create!(client_id: "client_id", client_secret: "client_secret", host: "host")
+    end
+    let!(:account) do
+      MultiApplicationsAccount.new(oauth_access_token: "access_token", host: "host")
     end
 
     it "returns API client initialized with OAuth token" do
-      token = double(token: "access_token", expired?: false)
-      allow(OAuth2::AccessToken).to receive(:new).and_return(token)
-      
-
       expect(account.api).to be_kind_of(BookingSync::API::Client)
       expect(account.api.token).to eq("access_token")
     end
@@ -195,12 +217,10 @@ RSpec.describe MultiApplicationsAccount, type: :model do
       account = MultiApplicationsAccount.create!(oauth_access_token: "token",
         oauth_refresh_token: "refresh", oauth_expires_at: "expires", host: "example.test")
 
-      account.clear_token!
-      account.reload
-
-      expect(account.oauth_access_token).to be_nil
-      expect(account.oauth_refresh_token).to be_nil
-      expect(account.oauth_expires_at).to be_nil
+      expect { account.clear_token! }
+        .to change { account.reload.oauth_access_token }.from("token").to(nil)
+        .and change { account.oauth_refresh_token }.from("refresh").to(nil)
+        .and change { account.oauth_expires_at }.from("expires").to(nil)
     end
   end
 
@@ -210,22 +230,10 @@ RSpec.describe MultiApplicationsAccount, type: :model do
       account = MultiApplicationsAccount.create!(oauth_access_token: "token",
         oauth_refresh_token: "refresh", oauth_expires_at: "expires", host: "example.test")
 
-      account.update_token(token)
-
-      expect(account.oauth_access_token).to eq "new_access_token"
-      expect(account.oauth_refresh_token).to eq "new_refresh_token"
-      expect(account.oauth_expires_at).to eq "new_expires_at"
-    end
-  end
-
-  describe ".find_by_host_and_synced_id" do
-    let!(:account_1) { MultiApplicationsAccount.create!(synced_id: 1, host: "example.test") }
-    let!(:account_2) { MultiApplicationsAccount.create!(synced_id: 2, host: "example.test") }
-    let!(:account_3) { MultiApplicationsAccount.create!(synced_id: 1, host: "example2.test") }
-    let!(:account_4) { MultiApplicationsAccount.create!(synced_id: 2, host: "example2.test") }
-
-    it "returns the right account" do
-      expect(MultiApplicationsAccount.find_by_host_and_synced_id("example2.test", 1)).to eq account_3
+      expect { account.update_token(token) }
+        .to change { account.oauth_access_token }.from("token").to("new_access_token")
+        .and change { account.oauth_refresh_token }.from("refresh").to("new_refresh_token")
+        .and change { account.oauth_expires_at }.from("expires").to("new_expires_at")
     end
   end
 end

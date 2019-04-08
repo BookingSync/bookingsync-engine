@@ -67,9 +67,6 @@ class Account < ActiveRecord::Base
 end
 ```
 
-When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction).
-
-
 ### For multi application setup
 
 Then, generate a migration to add OAuth fields for the `Account` class:
@@ -124,7 +121,13 @@ class Application < ActiveRecord::Base
 end
 ```
 
-Set `BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS` to `true`.
+Activate the multi app mode in an initializer:
+
+```ruby
+BookingSyncEngine.setup do |setup|
+  setup.support_multi_applications = true
+end
+```
 
 #### Use different models for single app and multiple app setup
 
@@ -163,7 +166,6 @@ The engine is configured by the following ENV variables:
 * `BOOKINGSYNC_APP_SECRET` - BookingSync Application's Client Secret
 * `BOOKINGSYNC_VERIFY_SSL` - Verify SSL (available only in development or test). Default to false
 * `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
-* `BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS` - Activate the multi-applications account signin. Default to false.
 
 You might want to use [dotenv-rails](https://github.com/bkeepers/dotenv)
 to make ENV variables management easy. See `spec/dummy/.env.sample`.

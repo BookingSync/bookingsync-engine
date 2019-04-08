@@ -15,12 +15,7 @@ module BookingSyncEngine
   end
 
   def self.support_multi_applications?
-    env_opt = ENV.fetch("BOOKINGSYNC_ENGINE_SUPPORT_MULTI_APPLICATIONS") { nil }
-    if env_opt
-      env_opt.to_s.downcase == "true"
-    else
-      support_multi_applications
-    end
+    support_multi_applications
   end
 
   def self.setup_model

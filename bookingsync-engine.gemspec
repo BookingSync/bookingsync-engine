@@ -27,4 +27,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry-rails"
   s.add_development_dependency "shoulda-matchers", "~> 3.0"
   s.add_development_dependency "bookingsync-stylecheck"
+  s.add_development_dependency "webmock"
 end
