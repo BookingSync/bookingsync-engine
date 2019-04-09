@@ -91,9 +91,6 @@ class Account < ActiveRecord::Base
 end
 ```
 
-When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
-
-
 You also need to create applications
 
 ```console

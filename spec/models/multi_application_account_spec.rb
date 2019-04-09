@@ -110,15 +110,15 @@ RSpec.describe MultiApplicationsAccount, type: :model do
       around do |test_case|
         # comparing rails version, the use_transactional_fixtures only works pre 5
         if Rails::VERSION::MAJOR >= 5
-          orinal_setup = self.use_transactional_tests
+          original_setup = self.use_transactional_tests
           self.use_transactional_tests = false
           test_case.run
-          self.use_transactional_tests = orinal_setup
+          self.use_transactional_tests = original_setup
         else
-          orinal_setup = self.use_transactional_fixtures
+          original_setup = self.use_transactional_fixtures
           self.use_transactional_fixtures = false
           test_case.run
-          self.use_transactional_fixtures = orinal_setup
+          self.use_transactional_fixtures = original_setup
         end
       end
 
@@ -213,10 +213,12 @@ RSpec.describe MultiApplicationsAccount, type: :model do
   end
 
   describe "#clear_token!" do
-    it "clears token related fields on account" do
-      account = MultiApplicationsAccount.create!(oauth_access_token: "token",
+    let!(:account) do
+      MultiApplicationsAccount.create!(oauth_access_token: "token",
         oauth_refresh_token: "refresh", oauth_expires_at: "expires", host: "example.test")
+    end
 
+    it "clears token related fields on account" do
       expect { account.clear_token! }
         .to change { account.reload.oauth_access_token }.from("token").to(nil)
         .and change { account.oauth_refresh_token }.from("refresh").to(nil)
@@ -225,11 +227,17 @@ RSpec.describe MultiApplicationsAccount, type: :model do
   end
 
   describe "#update_token" do
-    it "updates the token related fields on account" do
-      token = double(token: "new_access_token", refresh_token: "new_refresh_token", expires_at: "new_expires_at")
-      account = MultiApplicationsAccount.create!(oauth_access_token: "token",
+    let!(:account) do
+      MultiApplicationsAccount.create!(oauth_access_token: "token",
         oauth_refresh_token: "refresh", oauth_expires_at: "expires", host: "example.test")
+    end
 
+    let(:token) do
+      double(token: "new_access_token", refresh_token: "new_refresh_token",
+        expires_at: "new_expires_at")
+    end
+
+    it "updates the token related fields on account" do
       expect { account.update_token(token) }
         .to change { account.oauth_access_token }.from("token").to("new_access_token")
         .and change { account.oauth_refresh_token }.from("refresh").to("new_refresh_token")

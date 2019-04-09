@@ -18,7 +18,7 @@ module BookingSyncEngine
     support_multi_applications
   end
 
-  def self.setup_model
+  def self.account_model
     support_multi_applications? ? multi_app_model.call : single_app_model.call
   end
 end
