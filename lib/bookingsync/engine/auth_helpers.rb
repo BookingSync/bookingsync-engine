@@ -11,7 +11,10 @@ module BookingSync::Engine::AuthHelpers
 
   # @return [Account, nil] currently authorized Account or nil if unauthorized
   def current_account
-    @current_account ||= ::Account.find_by(synced_id: session[:account_id]) if session[:account_id].present?
+    return if session[:account_id].nil?
+
+    @current_account ||=
+      BookingSyncEngine.account_model.find_by_host_and_synced_id(request.host, session[:account_id])
   end
 
   # Callback after account is authorized.
@@ -130,7 +133,7 @@ module BookingSync::Engine::AuthHelpers
     store_bookingsync_account_id if BookingSync::Engine.embedded
     sign_out_if_inactive
     enforce_requested_account_authorized!
-    request_authorization! unless current_account
+    request_authorization! if current_account.nil?
   end
 
   def store_bookingsync_account_id # :nodoc:

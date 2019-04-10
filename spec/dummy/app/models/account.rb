@@ -1,3 +1,3 @@
 class Account < ActiveRecord::Base
-  include BookingSync::Engine::Model
+  include BookingSync::Engine::Models::Account
 end

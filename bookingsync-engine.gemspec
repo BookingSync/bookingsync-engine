@@ -20,9 +20,12 @@ Gem::Specification.new do |s|
   s.add_dependency "bookingsync-api", ">= 0.1.7"
 
   s.add_development_dependency "appraisal"
+  s.add_development_dependency "dotenv-rails"
   s.add_development_dependency "pg"
   s.add_development_dependency "guard-rspec"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "pry-rails"
   s.add_development_dependency "shoulda-matchers", "~> 3.0"
+  s.add_development_dependency "bookingsync-stylecheck"
+  s.add_development_dependency "webmock"
 end

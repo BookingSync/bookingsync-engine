@@ -1,9 +1,11 @@
-ENV['RAILS_ENV'] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
-require 'rspec/rails'
-require 'shoulda/matchers'
-require 'pry-rails'
+require "dotenv/load"
+require "rspec/rails"
+require "shoulda/matchers"
+require "pry-rails"
+require "webmock/rspec"
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

@@ -5,7 +5,7 @@
 
 ## Requirements
 
-This engine requires Rails `>= 5.0.0` and Ruby `>= 2.2.0`.
+This engine requires Rails `>= 5.0.0` and Ruby `>= 2.3.0`.
 
 ## Documentation
 
@@ -36,11 +36,14 @@ This will add the following routes:
 * `/auth/failure`
 * `/signout`
 
+
 BookingSync Engine uses the `Account` model to authenticate each BookingSync Account, if you do not have an `Account` model yet, create one:
 
 ```console
 rails g model Account
 ```
+
+### For single application setup
 
 Then, generate a migration to add OAuth fields for the `Account` class:
 
@@ -56,15 +59,100 @@ and migrate:
 rake db:migrate
 ```
 
-Also include `BookingSync::Engine::Account` in your `Account` model:
+Also include `BookingSync::Engine::Models::Account` in your `Account` model:
 
 ```ruby
 class Account < ActiveRecord::Base
-  include BookingSync::Engine::Model
+  include BookingSync::Engine::Models::Account
 end
 ```
 
-When saving new token, this gem uses a separate thread with new db connection to ensure token save (in case of a rollback in the main transaction). To make room for the new connections, it is recommended to increase db `pool` size by 2-3.
+### For multi application setup
+
+Then, generate a migration to add OAuth fields for the `Account` class:
+
+```console
+rails g migration AddOAuthFieldsToAccounts provider:string synced_id:integer:index \
+  name:string oauth_access_token:string oauth_refresh_token:string \
+  oauth_expires_at:string  host:string:uniq:index
+```
+
+Add manually `null: false` to the `host` field on the newly created migration file, then migrate:
+
+```console
+rake db:migrate
+```
+
+Also include `BookingSync::Engine::Models::MultiApplicationsAccount` in your `Account` model:
+
+```ruby
+class Account < ActiveRecord::Base
+  include BookingSync::Engine::Models::MultiApplicationsAccount
+end
+```
+
+You also need to create applications
+
+```console
+rails g model Application
+```
+
+Then, generate a migration to add credentials fields for the `Application` class:
+
+```console
+rails g migration AddCredentialsFieldsToApplications host:string:uniq:index client_id:text:uniq:index \
+  client_secret:text:uniq:index
+```
+
+Add `null: false` to this 3 attributes, then migrate:
+
+```console
+rake db:migrate
+```
+
+Also include `BookingSync::Engine::Models::Application` in your `Application` model:
+
+```ruby
+class Application < ActiveRecord::Base
+  include BookingSync::Engine::Models::Application
+end
+```
+
+Activate the multi app mode in an initializer:
+
+```ruby
+BookingSyncEngine.setup do |setup|
+  setup.support_multi_applications = true
+end
+```
+
+#### Use different models for single app and multiple app setup
+
+To make transition between the two modes on the fly, you can use different model name for your
+accounts.
+
+For the following example:
+
+```ruby
+class MySingleAppAccount < ActiveRecord::Base
+  include BookingSync::Engine::Models::Account
+end
+
+class MyMultiAppAccount < ActiveRecord::Base
+  include BookingSync::Engine::Models::MultiApplicationsAccount
+end
+```
+
+You just need to define which model goes with which mode in an initializer.
+
+
+```ruby
+BookingSyncEngine.setup do |setup|
+  setup.single_app_model = -> { ::MySingleAppAccount }
+  setup.multi_app_model = -> { ::MyMultiAppAccount }
+end
+```
+
 
 ## Configuration
 
@@ -77,7 +165,7 @@ The engine is configured by the following ENV variables:
 * `BOOKINGSYNC_SCOPE` - Space separated list of required scopes. Defaults to nil, which means the public scope.
 
 You might want to use [dotenv-rails](https://github.com/bkeepers/dotenv)
-to make ENV variables management easy.
+to make ENV variables management easy. See `spec/dummy/.env.sample`.
 
 ## Embedded vs Standalone apps
 
@@ -168,3 +256,11 @@ We would love to see you contributing. Please, just follow the guidelines from [
 ### Testing
 
 By default, your tests will run against the Rails version used in the main Gemfile.lock, to test against all supported Rails version, please run the tests with Appraisals with: `appraisal rake spec`
+
+#### Testing with docker
+
+You can choose to run PostgreSQL in a Docker container. At the moment, you should use [Beta channel](https://docs.docker.com/docker-for-mac/) on a Mac - so you can reach the docker machine on localhost. It is possible to set it up with stable, but then you have to configure it another way.
+
+Use `spec/dummy/config/database.yml.docker` instead of `spec/dummy/config/database.yml`.
+
+Once intalled, setup the DB with `docker-compose create`, `docker-compose start` and `rake db:setup`

@@ -4,13 +4,37 @@ RSpec.describe SessionsController, type: :controller do
   routes { BookingSync::Engine.routes }
 
   describe "GET create" do
+    let(:auth) { OmniAuth.config.mock_auth[:bookingsync] }
+
     before do
-      request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:bookingsync]
+      request.env["omniauth.auth"] = auth
     end
 
-    it "loads or creates account from omniauth auth" do
-      expect(Account).to receive(:from_omniauth).and_call_original
-      get :create, params: { provider: :bookingsync }
+    context "with single app setup" do
+      before do
+        allow(BookingSyncEngine).to receive(:support_multi_applications?).and_return(false)
+      end
+
+      it "loads or creates account from omniauth auth" do
+        expect {
+          get :create, params: { provider: :bookingsync }
+        }.to change { Account.count }.by(1)
+        expect(Account.last.synced_id).to eq(123)
+      end
+    end
+
+    context "with multi app setup" do
+      before do
+        allow(BookingSyncEngine).to receive(:support_multi_applications?).and_return(true)
+      end
+
+      it "loads or creates account from omniauth auth" do
+        expect {
+          get :create, params: { provider: :bookingsync }
+        }.to change { MultiApplicationsAccount.count }.by(1)
+        expect(MultiApplicationsAccount.last.synced_id).to eq(123)
+        expect(MultiApplicationsAccount.last.host).to eq("test.host")
+      end
     end
 
     it "runs the account_authorized callback" do
