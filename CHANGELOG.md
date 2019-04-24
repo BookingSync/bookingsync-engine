@@ -1,5 +1,7 @@
 # Master
 
+# 4.0.0 (2019-04-24)
+
 * Add support for multi application setup
 * BREAKING CHANGE: Account models method `from_omniauth` now takes the host as second argument
 * BREAKING CHANGE: Rename BookingSync::Engine::Model in BookingSync::Engine::Models::Account
