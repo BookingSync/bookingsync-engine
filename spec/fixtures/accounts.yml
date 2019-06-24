@@ -7,6 +7,7 @@ one:
   oauth_access_token: MyString
   oauth_refresh_token: MyString
   oauth_expires_at: MyString
+  customized_key: 1
 
 two:
   provider: MyString
@@ -15,3 +16,4 @@ two:
   oauth_access_token: MyString
   oauth_refresh_token: MyString
   oauth_expires_at: MyString
+  customized_key: 1
