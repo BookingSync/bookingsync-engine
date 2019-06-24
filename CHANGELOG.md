@@ -1,5 +1,7 @@
 # Master
 
+* Add support for customization of account's bookingsync_id_key (`synced_id` is kept as default)
+
 # 5.1.0 (2020-04-01)
 
 * Add configuration for token refresh timeout and retry count
