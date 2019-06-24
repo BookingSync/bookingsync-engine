@@ -67,6 +67,7 @@ RSpec.describe Account, type: :model do
     end
   end
 
+  # depecated
   describe ".find_by_host_and_synced_id" do
     let!(:account_1) { Account.create!(synced_id: 1) }
     let!(:account_2) { Account.create!(synced_id: 2) }
@@ -74,6 +75,16 @@ RSpec.describe Account, type: :model do
 
     it "returns the right account" do
       expect(Account.find_by_host_and_synced_id("any_host", 3)).to eq account_3
+    end
+  end
+
+  describe ".find_by_host_and_bookingsync_id_key" do
+    let!(:account_1) { Account.create!(synced_id: 1) }
+    let!(:account_2) { Account.create!(synced_id: 2) }
+    let!(:account_3) { Account.create!(synced_id: 3) }
+
+    it "returns the right account" do
+      expect(Account.find_by_host_and_bookingsync_id_key("any_host", 3)).to eq account_3
     end
   end
 

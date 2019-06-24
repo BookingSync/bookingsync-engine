@@ -3,7 +3,7 @@ module BookingSync::Engine::Models::MultiApplicationsAccount
   include BookingSync::Engine::Models::BaseAccount
 
   included do
-    validates :synced_id, uniqueness: { scope: :host }
+    validates BookingSyncEngine.bookingsync_id_key, uniqueness: { scope: :host }
   end
 
   module ClassMethods
@@ -13,7 +13,7 @@ module BookingSync::Engine::Models::MultiApplicationsAccount
                              "multi application support"
       end
 
-      account = find_or_initialize_by(host: host, synced_id: auth.uid, provider: auth.provider)
+      account = find_or_initialize_by(host: host, provider: auth.provider, BookingSyncEngine.bookingsync_id_key => auth.uid)
 
       account.tap do |account|
         account.name = auth.info.business_name
@@ -22,8 +22,14 @@ module BookingSync::Engine::Models::MultiApplicationsAccount
       end
     end
 
+    def find_by_host_and_bookingsync_id_key(host, bookingsync_id)
+      find_by(host: host, BookingSyncEngine.bookingsync_id_key => bookingsync_id)
+    end
+
+    # DEPRECATED: Please use find_by_host_and_bookingsync_id_key instead.
     def find_by_host_and_synced_id(host, synced_id)
-      find_by(host: host, synced_id: synced_id)
+      warn("DEPRECATED: find_by_host_and_synced_id is deprecated, use #find_by_host_and_bookingsync_id_key instead. It will be removed with the release of version 5 of this gem. Called from #{Gem.location_of_caller.join(":")}")
+      find_by_host_and_bookingsync_id_key(host, synced_id)
     end
   end
 

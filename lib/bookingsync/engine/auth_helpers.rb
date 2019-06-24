@@ -16,7 +16,7 @@ module BookingSync::Engine::AuthHelpers
     return if session[:account_id].nil?
 
     @current_account ||=
-      ::BookingSyncEngine.account_model.find_by_host_and_synced_id(request.host, session[:account_id])
+      ::BookingSyncEngine.account_model.find_by_host_and_bookingsync_id_key(request.host, session[:account_id])
   end
 
   # Callback after account is authorized.
@@ -25,7 +25,7 @@ module BookingSync::Engine::AuthHelpers
   #
   # @param account [Account] the just authorized account
   def account_authorized(account)
-    session[:account_id] = account.synced_id.to_s
+    session[:account_id] = account.public_send(BookingSyncEngine.bookingsync_id_key).to_s
   end
 
   # Clear authorization if the account passed from the BookingSync app store
