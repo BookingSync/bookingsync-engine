@@ -4,7 +4,9 @@ module BookingSync::Engine::AuthHelpers
   included do
     rescue_from OAuth2::Error, with: :handle_oauth_error
     rescue_from BookingSync::API::Unauthorized, with: :reset_authorization!
-    helper_method :current_account
+    if respond_to?(:helper_method)
+      helper_method :current_account
+    end
   end
 
   private

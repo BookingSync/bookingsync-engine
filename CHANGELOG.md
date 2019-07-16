@@ -1,5 +1,7 @@
 # Master
 
+* Fix `AuthHelpers` include when `helper_method` is missing
+
 # 2.0.2 (2017-06-14)
 
 * Make internal API of APIClient more flexible
