@@ -1,5 +1,7 @@
 # Master
 
+* Fix module lookup
+
 # 4.0.1 (2019-07-17)
 
 * Fix `AuthHelpers` include when `helper_method` is missing
