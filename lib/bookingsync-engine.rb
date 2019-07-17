@@ -1,5 +1,3 @@
-require "bookingsync"
-
 module BookingSyncEngine
   cattr_accessor :support_multi_applications
   self.support_multi_applications = false
@@ -22,3 +20,5 @@ module BookingSyncEngine
     support_multi_applications? ? multi_app_model.call : single_app_model.call
   end
 end
+
+require "bookingsync"
