@@ -1,5 +1,7 @@
 # Master
 
+* Fix `AuthHelpers` include when `helper_method` is missing
+
 # 4.0.0 (2019-04-24)
 
 * Add support for multi application setup
