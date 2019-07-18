@@ -1,5 +1,7 @@
 # Master
 
+* Revert setting `refresh_token!` private
+
 # 4.0.2 (2019-07-17)
 
 * Fix module lookup

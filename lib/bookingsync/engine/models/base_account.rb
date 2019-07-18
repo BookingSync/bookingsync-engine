@@ -40,8 +40,6 @@ module BookingSync::Engine::Models::BaseAccount
     self.oauth_expires_at     = token.expires_at
   end
 
-  private
-
   def refresh_token!(current_token = token)
     @token = current_token.refresh!.tap do |new_token|
       update_token(new_token)
