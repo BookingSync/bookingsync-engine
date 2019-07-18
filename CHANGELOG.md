@@ -1,5 +1,7 @@
 # Master
 
+# 4.0.3 (2019-07-18)
+
 * Revert setting `refresh_token!` private
 
 # 4.0.2 (2019-07-17)
