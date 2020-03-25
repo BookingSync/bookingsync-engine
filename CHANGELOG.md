@@ -1,5 +1,8 @@
 # Master
 
+* Add support for Rails 6.0
+* Drop support for Ruby prior to 2.5 (to satisfy Rails 6 requirements)
+
 # 4.0.3 (2019-07-18)
 
 * Revert setting `refresh_token!` private
