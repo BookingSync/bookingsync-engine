@@ -10,7 +10,7 @@ module BookingSync::Engine::Models::BaseAccount
       token_options = {}
       if oauth_refresh_token
         token_options[:refresh_token] = oauth_refresh_token
-        token_options[:expires_at]    = oauth_expires_at
+        token_options[:expires_at]    = oauth_expires_at && oauth_expires_at.to_i
       end
 
       token = OAuth2::AccessToken.new(oauth_client, oauth_access_token, token_options)
