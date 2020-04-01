@@ -1,5 +1,7 @@
 # Master
 
+# 5.0.0 (2020-04-01)
+
 * Add support for Rails 6.0
 * Drop support for Ruby prior to 2.5 (to satisfy Rails 6 requirements)
 
