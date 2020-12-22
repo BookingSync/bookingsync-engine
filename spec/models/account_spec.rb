@@ -131,6 +131,40 @@ RSpec.describe Account, type: :model do
         expect(account.token).to be_a OAuth2::AccessToken
         expect(account.token.token).to eq "refreshed_token"
       end
+
+      context "with refresh failing with timeout" do
+        before do
+          call_count = 0
+          allow_any_instance_of(OAuth2::Client).to receive(:get_token).and_wrap_original do |m, *args|
+            call_count += 1
+            call_count < 3 ? raise(Faraday::TimeoutError) : m.call(*args)
+          end
+        end
+
+        context "and retry works" do
+          before do
+            BookingSyncEngine.setup do |setup|
+              setup.token_refresh_timeout_retry_count = 2
+            end
+          end
+
+          it "retries as passed in config" do
+            expect(account.token.token).to eq "refreshed_token"
+          end
+        end
+
+        context "and retry doesn't help" do
+          before do
+            BookingSyncEngine.setup do |setup|
+              setup.token_refresh_timeout_retry_count = 1
+            end
+          end
+
+          it "raises error" do
+            expect { account.token.token }.to raise_error(Faraday::TimeoutError)
+          end
+        end
+      end
     end
   end
 
@@ -156,6 +190,40 @@ RSpec.describe Account, type: :model do
 
     it "returns a client credential token setup without default params" do
       expect(account.application_token.token).to eq "the_access_token"
+    end
+
+    context "with refresh failing with timeout" do
+      before do
+        call_count = 0
+        allow_any_instance_of(OAuth2::Client).to receive(:get_token).and_wrap_original do |m, *args|
+          call_count += 1
+          call_count < 3 ? raise(Faraday::TimeoutError) : m.call(*args)
+        end
+      end
+
+      context "and retry works" do
+        before do
+          BookingSyncEngine.setup do |setup|
+            setup.token_refresh_timeout_retry_count = 2
+          end
+        end
+
+        it "retries as passed in config" do
+          expect(account.application_token.token).to eq "the_access_token"
+        end
+      end
+
+      context "and retry doesn't help" do
+        before do
+          BookingSyncEngine.setup do |setup|
+            setup.token_refresh_timeout_retry_count = 1
+          end
+        end
+
+        it "raises error" do
+          expect { account.application_token.token }.to raise_error(Faraday::TimeoutError)
+        end
+      end
     end
   end
 
