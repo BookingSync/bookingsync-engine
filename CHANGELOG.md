@@ -1,5 +1,7 @@
 # Master
 
+# 5.1.0 (2020-04-01)
+
 * Add configuration for token refresh timeout and retry count
 
 # 5.0.0 (2020-04-01)
