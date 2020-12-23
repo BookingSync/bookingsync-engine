@@ -1,5 +1,7 @@
 # Master
 
+* Add configuration for token refresh timeout and retry count
+
 # 5.0.0 (2020-04-01)
 
 * Add support for Rails 6.0

@@ -8,6 +8,12 @@ module BookingSyncEngine
   cattr_accessor :multi_app_model
   self.multi_app_model = -> { ::Account }
 
+  cattr_accessor :oauth_client_connection_options
+  self.oauth_client_connection_options = { request: { timeout: 2 } }
+
+  cattr_accessor :token_refresh_timeout_retry_count
+  self.token_refresh_timeout_retry_count = 2
+
   def self.setup
     yield self
   end

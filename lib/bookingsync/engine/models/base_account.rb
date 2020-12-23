@@ -41,9 +41,13 @@ module BookingSync::Engine::Models::BaseAccount
   end
 
   def refresh_token!(current_token = token)
-    @token = current_token.refresh!.tap do |new_token|
-      update_token(new_token)
-      save!
+    token_refresh_timeout_attempts_allowed = ::BookingSyncEngine.token_refresh_timeout_retry_count + 1
+
+    BookingSync::Engine::Retryable.perform(times: token_refresh_timeout_attempts_allowed, errors: [Faraday::TimeoutError]) do
+      @token = current_token.refresh!.tap do |new_token|
+        update_token(new_token)
+        save!
+      end
     end
   end
 end

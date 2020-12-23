@@ -76,16 +76,24 @@ module BookingSync
     #
     # @return [OAuth2::Client] configured OAuth client
     def self.oauth_client(client_id: ENV["BOOKINGSYNC_APP_ID"], client_secret: ENV["BOOKINGSYNC_APP_SECRET"])
+      connection_options = {
+        headers: { accept: "application/vnd.api+json" }
+      }.merge(::BookingSyncEngine.oauth_client_connection_options)
+
       client_options = {
         site: ENV["BOOKINGSYNC_URL"] || 'https://www.bookingsync.com',
-        connection_opts: { headers: { accept: "application/vnd.api+json" } }
+        connection_opts: connection_options
       }
       client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false' }
       OAuth2::Client.new(client_id, client_secret, client_options)
     end
 
     def self.application_token(client_id: ENV["BOOKINGSYNC_APP_ID"], client_secret: ENV["BOOKINGSYNC_APP_SECRET"])
-      oauth_client(client_id: client_id, client_secret: client_secret).client_credentials.get_token
+      token_refresh_timeout_attempts_allowed = ::BookingSyncEngine.token_refresh_timeout_retry_count + 1
+
+      BookingSync::Engine::Retryable.perform(times: token_refresh_timeout_attempts_allowed, errors: [Faraday::TimeoutError]) do
+        oauth_client(client_id: client_id, client_secret: client_secret).client_credentials.get_token
+      end
     end
   end
 end
@@ -94,3 +102,4 @@ require "bookingsync/engine/application_credentials"
 require "bookingsync/engine/credentials_resolver"
 require "bookingsync/engine/api_client"
 require "bookingsync/engine/models"
+require "bookingsync/engine/retryable"
