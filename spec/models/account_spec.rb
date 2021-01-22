@@ -67,7 +67,7 @@ RSpec.describe Account, type: :model do
     end
   end
 
-  # depecated
+  # deprecated
   describe ".find_by_host_and_synced_id" do
     let!(:account_1) { Account.create!(synced_id: 1) }
     let!(:account_2) { Account.create!(synced_id: 2) }

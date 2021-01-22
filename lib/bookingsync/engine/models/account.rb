@@ -23,7 +23,7 @@ module BookingSync::Engine::Models::Account
 
     # DEPRECATED: Please use find_by_host_and_bookingsync_id_key instead.
     def find_by_host_and_synced_id(_host, synced_id)
-      warn("DEPRECATED: find_by_host_and_synced_id is deprecated, use #find_by_host_and_bookingsync_id_key instead. It will be removed with the release of version 5 of this gem. Called from #{Gem.location_of_caller.join(":")}")
+      warn("DEPRECATED: find_by_host_and_synced_id is deprecated, use #find_by_host_and_bookingsync_id_key instead. It will be removed with the release of version 6 of this gem. Called from #{Gem.location_of_caller.join(":")}")
       find_by_host_and_bookingsync_id_key(nil, synced_id)
     end
   end
