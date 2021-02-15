@@ -75,6 +75,7 @@ RSpec.describe MultiApplicationsAccount, type: :model do
     end
   end
 
+  # deprecated
   describe ".find_by_host_and_synced_id" do
     let!(:account_1) { MultiApplicationsAccount.create!(synced_id: 1, host: "example.test") }
     let!(:account_2) { MultiApplicationsAccount.create!(synced_id: 2, host: "example.test") }
@@ -83,6 +84,17 @@ RSpec.describe MultiApplicationsAccount, type: :model do
 
     it "returns the right account" do
       expect(MultiApplicationsAccount.find_by_host_and_synced_id("example2.test", 1)).to eq account_3
+    end
+  end
+
+  describe ".find_by_host_and_bookingsync_id_key" do
+    let!(:account_1) { MultiApplicationsAccount.create!(synced_id: 1, host: "example.test") }
+    let!(:account_2) { MultiApplicationsAccount.create!(synced_id: 2, host: "example.test") }
+    let!(:account_3) { MultiApplicationsAccount.create!(synced_id: 1, host: "example2.test") }
+    let!(:account_4) { MultiApplicationsAccount.create!(synced_id: 2, host: "example2.test") }
+
+    it "returns the right account" do
+      expect(MultiApplicationsAccount.find_by_host_and_bookingsync_id_key("example2.test", 1)).to eq account_3
     end
   end
 

@@ -3,12 +3,12 @@ module BookingSync::Engine::Models::Account
   include BookingSync::Engine::Models::BaseAccount
 
   included do
-    validates :synced_id, uniqueness: true
+    validates BookingSyncEngine.bookingsync_id_key, uniqueness: true
   end
 
   module ClassMethods
     def from_omniauth(auth, _host)
-      account = find_or_initialize_by(synced_id: auth.uid, provider: auth.provider)
+      account = find_or_initialize_by(BookingSyncEngine.bookingsync_id_key => auth.uid, provider: auth.provider)
 
       account.tap do |account|
         account.name = auth.info.business_name
@@ -17,8 +17,14 @@ module BookingSync::Engine::Models::Account
       end
     end
 
+    def find_by_host_and_bookingsync_id_key(_host, bookingsync_id)
+      find_by(BookingSyncEngine.bookingsync_id_key => bookingsync_id)
+    end
+
+    # DEPRECATED: Please use find_by_host_and_bookingsync_id_key instead.
     def find_by_host_and_synced_id(_host, synced_id)
-      find_by(synced_id: synced_id)
+      warn("DEPRECATED: find_by_host_and_synced_id is deprecated, use #find_by_host_and_bookingsync_id_key instead. It will be removed with the release of version 6 of this gem. Called from #{Gem.location_of_caller.join(":")}")
+      find_by_host_and_bookingsync_id_key(nil, synced_id)
     end
   end
 

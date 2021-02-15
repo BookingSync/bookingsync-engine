@@ -14,6 +14,9 @@ module BookingSyncEngine
   cattr_accessor :token_refresh_timeout_retry_count
   self.token_refresh_timeout_retry_count = 2
 
+  cattr_accessor :bookingsync_id_key
+  self.bookingsync_id_key = :synced_id
+
   def self.setup
     yield self
   end
