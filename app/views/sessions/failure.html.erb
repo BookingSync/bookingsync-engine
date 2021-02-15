@@ -2,4 +2,6 @@
 
 <p>Error: <%= @error_message %></p>
 
-<a href="/auth/bookingsync">Sign in again</a>
+<%= form_tag("/auth/bookingsync", method: :post) do %>
+  <button type="submit">Sign in again</button>
+<% end %>

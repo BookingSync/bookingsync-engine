@@ -1,3 +1,5 @@
+require "repost"
+
 module BookingSync::Engine::AuthHelpers
   extend ActiveSupport::Concern
 
@@ -79,23 +81,23 @@ module BookingSync::Engine::AuthHelpers
   # Load the new authorization path using Javascript by default.
   def request_authorization_for_embedded!
     allow_bookingsync_iframe
-    render html: ("<script type='text/javascript'>top.location.href = " +
-      "'#{new_authorization_path}';</script>").html_safe
+    render_auto_submit_form
   end
 
   # Request a new authorization for Standalone Apps.
   #
   # Redirects to new authorization path by default.
   def request_authorization_for_standalone!
-    redirect_to new_authorization_path
+    render_auto_submit_form
   end
 
-  # Path to which the user should be redirected to start a new
+  # Path which will be used in POST request to start a new
   # Authorization process.
   #
-  # Default to /auth/bookingsync/?account_id=SESSION_BOOKINGSYNC_ACCOUNT_ID
+  # Default to /auth/bookingsync
+  NEW_AUTHORIZATION_URL = "/auth/bookingsync".freeze
   def new_authorization_path
-    "/auth/bookingsync/?account_id=#{session[:_bookingsync_account_id]}"
+    NEW_AUTHORIZATION_URL
   end
 
   def new_authorization_url
@@ -140,5 +142,15 @@ module BookingSync::Engine::AuthHelpers
 
   def store_bookingsync_account_id # :nodoc:
     session[:_bookingsync_account_id] = params.delete(:_bookingsync_account_id)
+  end
+
+  def render_auto_submit_form
+    html = Repost::Senpai.perform(
+      new_authorization_path,
+      params: { account_id: session[:_bookingsync_account_id] },
+      options: { authenticity_token: Rack::Protection::AuthenticityToken.token(session) }
+    ).html_safe
+
+    render html: html
   end
 end
