@@ -71,9 +71,9 @@ module BookingSync::Engine::AuthHelpers
 
   # Request a new authorization for Ajax requests.
   #
-  # Renders the new authorization path with 401 Unauthorized status by default.
+  # Renders the new auto submit form with 401 Unauthorized status by default.
   def request_authorization_for_xhr!
-    render plain: new_authorization_url, status: :unauthorized
+    render html: auto_submit_form_html, status: :unauthorized
   end
 
   # Request a new authorization for Embedded Apps.
@@ -81,14 +81,14 @@ module BookingSync::Engine::AuthHelpers
   # Load the new authorization path using Javascript by default.
   def request_authorization_for_embedded!
     allow_bookingsync_iframe
-    render_auto_submit_form
+    render html: auto_submit_form_html
   end
 
   # Request a new authorization for Standalone Apps.
   #
   # Redirects to new authorization path by default.
   def request_authorization_for_standalone!
-    render_auto_submit_form
+    render html: auto_submit_form_html
   end
 
   # Path which will be used in POST request to start a new
@@ -144,13 +144,11 @@ module BookingSync::Engine::AuthHelpers
     session[:_bookingsync_account_id] = params.delete(:_bookingsync_account_id)
   end
 
-  def render_auto_submit_form
-    html = Repost::Senpai.perform(
+  def auto_submit_form_html
+    Repost::Senpai.perform(
       new_authorization_path,
       params: { account_id: session[:_bookingsync_account_id] },
       options: { authenticity_token: Rack::Protection::AuthenticityToken.token(session) }
     ).html_safe
-
-    render html: html
   end
 end

@@ -5,11 +5,11 @@ RSpec.describe AuthenticatedController, type: :controller do
     context "when engine is embedded" do
       before { BookingSync::Engine.embedded! }
 
-      it "redirects to auth using js" do
+      it "renders autosubmitted form" do
         get :index
         expect(response.status).to eq(200)
-        expect(response.body).to eq(
-          "<script type='text/javascript'>top.location.href = '/auth/bookingsync/?account_id=';</script>")
+        expect(response.body).to include("action='/auth/bookingsync' method='post'")
+        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
         expect(response.header["Content-Type"]).to include("text/html")
       end
     end
@@ -17,12 +17,11 @@ RSpec.describe AuthenticatedController, type: :controller do
     context "when engine is standalone" do
       before { BookingSync::Engine.standalone! }
 
-      it "redirects to auth using 302 redirect" do
+      it "renders autosubmitted form" do
         get :index
-        expect(response.status).to eq(302)
-        expect(response.redirect_url).to eq("http://test.host/auth/bookingsync/?account_id=")
-        expect(response.body).to eq(
-          "<html><body>You are being <a href=\"http://test.host/auth/bookingsync/?account_id=\">redirected</a>.</body></html>")
+        expect(response.status).to eq(200)
+        expect(response.body).to include("action='/auth/bookingsync' method='post'")
+        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
       end
     end
   end
@@ -31,20 +30,22 @@ RSpec.describe AuthenticatedController, type: :controller do
     context "when engine is embedded" do
       before { BookingSync::Engine.embedded! }
 
-      it "renders the target url in response" do
+      it "renders autosubmitted form" do
         get :index, xhr: true
         expect(response.status).to eq(401)
-        expect(response.body).to eq("http://test.host/auth/bookingsync/?account_id=")
+        expect(response.body).to include("action='/auth/bookingsync' method='post'")
+        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
       end
     end
 
     context "when engine is standalone" do
       before { BookingSync::Engine.standalone! }
 
-      it "renders the target url in response" do
+      it "renders autosubmitted form" do
         get :index, xhr: true
         expect(response.status).to eq(401)
-        expect(response.body).to eq("http://test.host/auth/bookingsync/?account_id=")
+        expect(response.body).to include("action='/auth/bookingsync' method='post'")
+        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
       end
     end
   end
