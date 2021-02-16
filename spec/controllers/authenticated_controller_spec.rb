@@ -49,4 +49,12 @@ RSpec.describe AuthenticatedController, type: :controller do
       end
     end
   end
+
+  describe "API request" do
+    it "returns 401 without response body" do
+      get :index, format: :json
+      expect(response.status).to eq(401)
+      expect(response.body).to eq("")
+    end
+  end
 end

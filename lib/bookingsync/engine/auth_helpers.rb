@@ -60,12 +60,20 @@ module BookingSync::Engine::AuthHelpers
 
   # Request a new authorization.
   def request_authorization!
-    if request.xhr?
-      request_authorization_for_xhr!
-    elsif BookingSync::Engine.embedded
-      request_authorization_for_embedded!
-    else
-      request_authorization_for_standalone!
+    respond_to do |format|
+      format.html do
+        if request.xhr?
+          request_authorization_for_xhr!
+        elsif BookingSync::Engine.embedded
+          request_authorization_for_embedded!
+        else
+          request_authorization_for_standalone!
+        end
+      end
+
+      format.json do
+        head :unauthorized
+      end
     end
   end
 
