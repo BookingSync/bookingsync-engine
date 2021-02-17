@@ -1,6 +1,10 @@
 require "spec_helper"
 
 RSpec.describe AuthenticatedController, type: :controller do
+  before do
+    Mime::Type.register "application/vnd.api+json", :api_json
+  end
+
   describe "GET index" do
     context "when engine is embedded" do
       before { BookingSync::Engine.embedded! }

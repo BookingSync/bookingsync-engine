@@ -74,6 +74,10 @@ module BookingSync::Engine::AuthHelpers
       format.json do
         head :unauthorized
       end
+
+      format.api_json do
+        head :unauthorized
+      end
     end
   end
 

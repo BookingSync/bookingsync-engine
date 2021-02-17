@@ -34,15 +34,6 @@ module BookingSync
       require "bookingsync/engine/session_helpers"
       require "bookingsync/engine/auth_helpers"
 
-      api_mime_types = %W(
-        application/vnd.api+json
-        text/x-json
-        application/jsonrequest
-      )
-
-      Mime::Type.unregister :json
-      Mime::Type.register "application/json", :json, api_mime_types
-
       ActiveSupport.on_load :action_controller do
         include BookingSync::Engine::Helpers
         include BookingSync::Engine::SessionHelpers
