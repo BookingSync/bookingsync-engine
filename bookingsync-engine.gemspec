@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", ">= 5.0.0"
   s.add_dependency "omniauth-bookingsync", '>= 0.5.0'
   s.add_dependency "omniauth-rails_csrf_protection", "~> 1.0"
-  s.add_dependency "repost"
+  s.add_dependency "repost", "~> 0.3"
   s.add_dependency "bookingsync-api", ">= 0.1.7"
 
   s.add_development_dependency "appraisal"
