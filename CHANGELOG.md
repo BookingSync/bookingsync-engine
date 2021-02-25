@@ -1,5 +1,7 @@
 # Master
 
+# 6.0.0 (2021-02-25)
+
 * Support omniauth `~> 2.0` version to fix CVE-2015-9284
 * Add support for customization of account's bookingsync_id_key (`synced_id` is kept as default)
 
