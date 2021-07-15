@@ -10,6 +10,7 @@ module BookingSync
           ::BookingSyncEngine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_ID"],
           ::BookingSyncEngine.support_multi_applications? ? nil : ENV["BOOKINGSYNC_APP_SECRET"],
           scope: ENV["BOOKINGSYNC_SCOPE"],
+          iframe: ENV.fetch("BOOKINGSYNC_IFRAME", false),
           setup: -> (env) {
             if url = ENV["BOOKINGSYNC_URL"]
               env["omniauth.strategy"].options[:client_options].site = url
