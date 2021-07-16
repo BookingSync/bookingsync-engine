@@ -1,5 +1,9 @@
 # Master
 
+# 6.0.0 (2021-07-16)
+
+* Allow to specify iframe redirect option via `BOOKINGSYNC_IFRAME` environment variable
+
 # 6.0.0 (2021-02-25)
 
 * Support omniauth `~> 2.0` version to fix CVE-2015-9284
