@@ -1,6 +1,6 @@
 # Master
 
-# 6.0.0 (2021-07-16)
+# 6.0.1 (2021-07-16)
 
 * Allow to specify iframe redirect option via `BOOKINGSYNC_IFRAME` environment variable
 
