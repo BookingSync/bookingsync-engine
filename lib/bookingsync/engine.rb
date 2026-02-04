@@ -83,7 +83,10 @@ module BookingSync
 
       client_options = {
         site: ENV["BOOKINGSYNC_URL"] || 'https://www.bookingsync.com',
-        connection_opts: connection_options
+        connection_opts: connection_options,
+        # NOTE: oauth2 gem 2.0 changed the default from :request_body to :basic_auth.
+        # We explicitly set :request_body to maintain backward compatibility.
+        auth_scheme: :request_body
       }
       client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false' }
       OAuth2::Client.new(client_id, client_secret, client_options)
