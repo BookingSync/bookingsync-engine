@@ -1,5 +1,7 @@
 # Master (Unreleased)
 
+# 6.1.0 (2026-02-05)
+
 * Fix oauth2 2.0 `auth_scheme` breaking change (now defaults to `:basic_auth`)
 * Add `BookingSync::Engine.auth_scheme` configuration option
 
