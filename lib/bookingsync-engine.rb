@@ -11,6 +11,9 @@ module BookingSyncEngine
   cattr_accessor :oauth_client_connection_options
   self.oauth_client_connection_options = { request: { timeout: 2 } }
 
+  cattr_accessor :oauth_client_auth_scheme
+  self.oauth_client_auth_scheme = :request_body
+
   cattr_accessor :token_refresh_timeout_retry_count
   self.token_refresh_timeout_retry_count = 2
 

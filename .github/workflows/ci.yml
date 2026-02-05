@@ -1,0 +1,41 @@
+name: CI
+on:
+  pull_request:
+jobs:
+  rspec:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { ruby: '3.3', rails: '7.2' }
+          - { ruby: '3.3', rails: '8.0' }
+          - { ruby: '3.3', rails: '8.1' }
+          - { ruby: '3.4', rails: '7.2' }
+          - { ruby: '3.4', rails: '8.0' }
+          - { ruby: '3.4', rails: '8.1' }
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/rails_${{ matrix.rails }}.gemfile
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bookingsync_engine_test
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rake spec
+      env:
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/bookingsync_engine_test
+        BOOKINGSYNC_URL: https://some_url.com
+        BOOKINGSYNC_APP_ID: some_client_id
+        BOOKINGSYNC_APP_SECRET: some_client_secret
+        BOOKINGSYNC_VERIFY_SSL: false

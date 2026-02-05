@@ -12,8 +12,8 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "renders autosubmitted form" do
         get :index
         expect(response.status).to eq(200)
-        expect(response.body).to include("action='/auth/bookingsync' method='post'")
-        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
+        expect(response.body).to include("action=\"/auth/bookingsync\" method=\"post\"")
+        expect(response.body).to include("<input type=\"hidden\" name=\"account_id\" value=\"\">")
         expect(response.header["Content-Type"]).to include("text/html")
       end
     end
@@ -24,8 +24,8 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "renders autosubmitted form" do
         get :index
         expect(response.status).to eq(200)
-        expect(response.body).to include("action='/auth/bookingsync' method='post'")
-        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
+        expect(response.body).to include("action=\"/auth/bookingsync\" method=\"post\"")
+        expect(response.body).to include("<input type=\"hidden\" name=\"account_id\" value=\"\">")
       end
     end
   end
@@ -37,8 +37,8 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "renders autosubmitted form" do
         get :index, xhr: true
         expect(response.status).to eq(401)
-        expect(response.body).to include("action='/auth/bookingsync' method='post'")
-        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
+        expect(response.body).to include("action=\"/auth/bookingsync\" method=\"post\"")
+        expect(response.body).to include("<input type=\"hidden\" name=\"account_id\" value=\"\">")
       end
     end
 
@@ -48,8 +48,8 @@ RSpec.describe AuthenticatedController, type: :controller do
       it "renders autosubmitted form" do
         get :index, xhr: true
         expect(response.status).to eq(401)
-        expect(response.body).to include("action='/auth/bookingsync' method='post'")
-        expect(response.body).to include("<input type='hidden' name='account_id' value=''>")
+        expect(response.body).to include("action=\"/auth/bookingsync\" method=\"post\"")
+        expect(response.body).to include("<input type=\"hidden\" name=\"account_id\" value=\"\">")
       end
     end
   end

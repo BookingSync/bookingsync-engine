@@ -9,3 +9,4 @@ test:
   encoding: unicode
   database: bookingsync_engine_test
   pool: 5
+  url: <%= ENV['DATABASE_URL'] %>

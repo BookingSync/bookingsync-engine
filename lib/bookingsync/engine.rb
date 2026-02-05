@@ -83,7 +83,8 @@ module BookingSync
 
       client_options = {
         site: ENV["BOOKINGSYNC_URL"] || 'https://www.bookingsync.com',
-        connection_opts: connection_options
+        connection_opts: connection_options,
+        auth_scheme: ::BookingSyncEngine.oauth_client_auth_scheme
       }
       client_options[:ssl] = { verify: ENV['BOOKINGSYNC_VERIFY_SSL'] != 'false' }
       OAuth2::Client.new(client_id, client_secret, client_options)

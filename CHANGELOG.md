@@ -1,4 +1,7 @@
-# Master
+# Master (Unreleased)
+
+* Fix oauth2 2.0 `auth_scheme` breaking change (now defaults to `:basic_auth`)
+* Add `BookingSync::Engine.auth_scheme` configuration option
 
 # 6.0.1 (2021-07-16)
 
@@ -31,7 +34,7 @@
 * Fix `AuthHelpers` include when `helper_method` is missing
 
 # 4.0.0 (2019-04-24)
-
+ª
 * Add support for multi application setup
 * BREAKING CHANGE: Account models method `from_omniauth` now takes the host as second argument
 * BREAKING CHANGE: Rename BookingSync::Engine::Model in BookingSync::Engine::Models::Account
